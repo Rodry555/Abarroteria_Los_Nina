@@ -145,14 +145,14 @@ function renderCart() {
     if (!cart || cart.length === 0) {
         container.innerHTML = '';
         if (emptyEl) {
-            emptyEl.style.display = 'block';
+            emptyEl.hidden = false;
         }
         setSummary(0, 0, 0);
         return;
     }
 
     if (emptyEl) {
-        emptyEl.style.display = 'none';
+        emptyEl.hidden = true;
     }
 
     let subtotal = 0;
@@ -285,17 +285,26 @@ function buildProductCard(p) {
     const stock = parseInt(p.stock) || 0;
     const stockClass = stock > 5 ? 'available' : (stock > 0 ? 'low' : 'out');
     const stockText = stock > 5 ? 'Disponible' : (stock > 0 ? '¡Últimas ' + stock + ' unidades!' : 'Agotado');
+    const catId = parseInt(p.categoria_id) || 0;
+
+    const safeId = parseInt(p.id) || 0;
+    const addBtn = stock <= 0
+        ? '<button class="btn btn-primary btn-add" disabled>Agotado</button>'
+        : '<button class="btn btn-primary btn-add" data-id="' + safeId + '" data-nombre="' + escapeHtml(p.nombre) + '" data-emoji="' + escapeHtml(p.emoji || '') + '" data-precio="' + escapeHtml(p.precio) + '">Agregar al carrito</button>';
+
+    const reserveBtn = stock > 0
+        ? '<button class="btn btn-accent btn-reservar" data-id="' + safeId + '" data-cantidad="1" data-nombre="' + escapeHtml(p.nombre) + '">Reservar</button>'
+        : '';
+
     return '' +
-        '<article class="product-card">' +
-            '<div class="product-card-img">' + escapeHtml(p.emoji || '📦') + '</div>' +
+        '<article class="product-card cat-' + catId + '">' +
+            '<div class="product-card-img" aria-hidden="true">' + escapeHtml(p.emoji || '📦') + '</div>' +
             '<div class="product-card-body">' +
                 '<span class="product-category">' + escapeHtml(p.categoria_nombre || '') + '</span>' +
                 '<h3 class="product-name">' + escapeHtml(p.nombre) + '</h3>' +
                 '<div class="product-price">' + formatPrice(p.precio) + '</div>' +
                 '<div class="product-stock ' + stockClass + '">' + stockText + '</div>' +
-                '<div class="product-actions">' +
-                    '<button class="btn btn-primary btn-add" data-id="' + p.id + '" data-nombre="' + escapeHtml(p.nombre) + '" data-emoji="' + escapeHtml(p.emoji || '') + '" data-precio="' + p.precio + '">Agregar al carrito</button>' +
-                '</div>' +
+                '<div class="product-actions">' + addBtn + reserveBtn + '</div>' +
             '</div>' +
         '</article>';
 }
@@ -427,15 +436,36 @@ function initNavToggle() {
     if (!toggle || !nav) {
         return;
     }
-    toggle.addEventListener('click', function () {
-        const isOpen = nav.classList.toggle('open');
+
+    function setOpen(isOpen) {
+        nav.classList.toggle('open', isOpen);
         toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+    }
+
+    toggle.addEventListener('click', function () {
+        setOpen(!nav.classList.contains('open'));
     });
+
     nav.addEventListener('click', function (e) {
-        const link = e.target.closest('a');
-        if (link) {
-            nav.classList.remove('open');
-            toggle.setAttribute('aria-expanded', 'false');
+        if (e.target.closest('a')) {
+            setOpen(false);
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav.classList.contains('open')) {
+            setOpen(false);
+            toggle.focus();
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!nav.classList.contains('open')) {
+            return;
+        }
+        if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+            setOpen(false);
         }
     });
 }

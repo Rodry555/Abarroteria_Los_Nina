@@ -1,4 +1,5 @@
 <?php
+define('LOS_NINA_APP', true);
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
@@ -57,9 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ->execute([':precio' => (float) $precio, ':id' => (int) $pid]);
             }
         }
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         $_SESSION['admin_msg'] = 'Stock y precios actualizados correctamente';
         header('Location: inventario.php');
         exit;
@@ -82,9 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':stock' => $stock,
             ':emoji' => $emoji,
         ]);
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         $_SESSION['admin_msg'] = 'Producto agregado correctamente';
         header('Location: inventario.php');
         exit;
@@ -93,90 +88,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['eliminar_producto'])) {
         $pid = (int) $_POST['eliminar_producto'];
         $pdo->prepare('DELETE FROM productos WHERE id = :id')->execute([':id' => $pid]);
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         $_SESSION['admin_msg'] = 'Producto eliminado correctamente';
         header('Location: inventario.php');
         exit;
     }
 }
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 $adminMsg = $_SESSION['admin_msg'] ?? '';
 unset($_SESSION['admin_msg']);
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario — Abarrotería Los Nina</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
-    <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container navbar-inner">
-            <a href="index.php" class="navbar-logo">
-                <picture>
-                    <source type="image/webp" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.webp 320w">
-                    <source type="image/webp" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.webp 160w">
-                    <source type="image/png" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.png 320w">
-                    <source type="image/png" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.png 160w">
-                    <img src="assets/img/logo/logo-160.png" srcset="assets/img/logo/logo-160.png 160w, assets/img/logo/logo-320.png 320w" sizes="(max-width: 480px) 58px, 82px" width="82" height="56" alt="Abarrotería Los Nina" class="navbar-logo-img">
-                </picture>
-                Los Nina<span>.</span>
-            </a>
-            <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navbar-nav">☰</button>
-            <div class="navbar-nav" id="navbar-nav">
-                <a href="index.php">Inicio</a>
-                <a href="inventario.php">Inventario</a>
-                <a href="nosotros.php">Nosotros</a>
-                <a href="contacto.php">Contacto</a>
-                <a href="carrito.php" class="cart-link">🛒 <span class="cart-badge" id="cart-badge">0</span></a>
-            </div>
-        </div>
-    </nav>
 
+$esAdmin = isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin';
+
+$titulo = 'Inventario — Abarrotería Los Nina';
+$descripcion = 'Catálogo completo de productos de Abarrotería Los Nina con stock actualizado.';
+$paginaActiva = 'inventario';
+require __DIR__ . '/partials/head.php';
+require __DIR__ . '/partials/navbar.php';
+?>
+
+<main>
     <section class="section">
         <div class="container">
-            <h1 class="section-title">Inventario</h1>
+            <div class="page-header">
+                <h1>Inventario</h1>
+                <p>Explora por categoría o busca por nombre. Agrega al carrito en un clic.</p>
+            </div>
 
             <?php if ($adminMsg !== ''): ?>
-                <div class="toast success show" style="position: static; transform: none;"><?= htmlspecialchars($adminMsg) ?></div>
+                <div class="toast success show toast-inline" role="status"><?= htmlspecialchars($adminMsg) ?></div>
             <?php endif; ?>
 
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
-                <div class="text-center" style="margin-bottom: 2rem;">
-                    <a href="login.php" class="btn btn-primary">Ir a Login Admin</a>
+            <?php if ($esAdmin): ?>
+                <div class="text-center" style="margin-bottom: 1.5rem;">
+                    <a href="#admin-panel" class="btn btn-ghost btn-sm">Ir al panel de administración</a>
                 </div>
             <?php endif; ?>
 
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;" id="cat-buttons">
-                <button class="btn btn-outline cat-filter active" data-cat="0">Todas</button>
-                <?php foreach ($categorias as $c): ?>
-                    <button class="btn btn-outline cat-filter" data-cat="<?= (int) $c['id'] ?>"><?= htmlspecialchars($c['nombre']) ?></button>
-                <?php endforeach; ?>
+            <div class="inventory-toolbar">
+                <div class="category-filters" id="cat-buttons" role="group" aria-label="Filtrar por categoría">
+                    <button class="btn btn-outline cat-filter active" data-cat="0">Todas</button>
+                    <?php foreach ($categorias as $c): ?>
+                        <button class="btn btn-outline cat-filter" data-cat="<?= (int) $c['id'] ?>"><?= htmlspecialchars($c['nombre']) ?></button>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="search-field">
+                    <label for="search-input" class="sr-only">Buscar producto</label>
+                    <input type="text" id="search-input" class="input" placeholder="Buscar producto…" autocomplete="off">
+                </div>
             </div>
 
-            <div style="margin-bottom: 2rem;">
-                <input type="text" id="search-input" class="input" placeholder="Buscar producto...">
-            </div>
-
-            <div class="grid-products" id="products-grid">
+            <div class="grid-products" id="products-grid" aria-live="polite">
                 <?php foreach ($productos as $p): ?>
                     <?php
                     $stock = (int) $p['stock'];
                     $stockClass = $stock > 5 ? 'available' : ($stock > 0 ? 'low' : 'out');
                     $stockText = $stock > 5 ? 'Disponible' : ($stock > 0 ? '¡Últimas ' . $stock . ' unidades!' : 'Agotado');
                     ?>
-                    <article class="product-card">
-                        <div class="product-card-img"><?= htmlspecialchars($p['emoji']) ?></div>
+                    <article class="product-card cat-<?= (int) $p['categoria_id'] ?>">
+                        <div class="product-card-img" aria-hidden="true"><?= htmlspecialchars($p['emoji']) ?></div>
                         <div class="product-card-body">
                             <span class="product-category"><?= htmlspecialchars($p['categoria_nombre']) ?></span>
                             <h3 class="product-name"><?= htmlspecialchars($p['nombre']) ?></h3>
@@ -187,8 +157,9 @@ unset($_SESSION['admin_msg']);
                                     data-id="<?= (int) $p['id'] ?>"
                                     data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
                                     data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
-                                    data-precio="<?= htmlspecialchars($p['precio']) ?>">
-                                    Agregar al carrito
+                                    data-precio="<?= htmlspecialchars($p['precio']) ?>"
+                                    <?= $stock <= 0 ? 'disabled' : '' ?>>
+                                    <?= $stock <= 0 ? 'Agotado' : 'Agregar al carrito' ?>
                                 </button>
                                 <?php if ($stock > 0): ?>
                                     <button class="btn btn-accent btn-reservar"
@@ -206,15 +177,18 @@ unset($_SESSION['admin_msg']);
         </div>
     </section>
 
-    <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
-        <section class="section" id="admin-panel" style="background: #fff;">
+    <?php if ($esAdmin): ?>
+        <section class="section admin-panel" id="admin-panel">
             <div class="container">
-                <h2 class="section-title">Panel Admin</h2>
+                <div class="page-header">
+                    <h2>Panel de administración</h2>
+                    <p>Agrega productos y actualiza stock o precios sin salir de la página.</p>
+                </div>
 
-                <div style="background: #F9FAFB; padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                <div class="admin-card">
                     <h3>Agregar producto</h3>
-                    <form method="POST" action="inventario.php" style="margin-top: 1rem;">
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <form method="POST" action="inventario.php">
+                        <div class="admin-grid-2">
                             <div>
                                 <label for="new_nombre">Nombre</label>
                                 <input class="input" type="text" id="new_nombre" name="nombre" required>
@@ -227,7 +201,7 @@ unset($_SESSION['admin_msg']);
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div style="grid-column: 1 / -1;">
+                            <div class="admin-full">
                                 <label for="new_descripcion">Descripción</label>
                                 <input class="input" type="text" id="new_descripcion" name="descripcion">
                             </div>
@@ -241,52 +215,41 @@ unset($_SESSION['admin_msg']);
                             </div>
                             <div>
                                 <label for="new_emoji">Emoji</label>
-                                <input class="input" type="text" id="new_emoji" name="emoji" value="📦">
+                                <input class="input" type="text" id="new_emoji" name="emoji" value="📦" maxlength="8">
                             </div>
                         </div>
                         <button type="submit" name="agregar_producto" class="btn btn-primary" style="margin-top: 1rem;">Agregar producto</button>
                     </form>
                 </div>
 
+                <form id="delete-form" method="POST" action="inventario.php"></form>
+
                 <form method="POST" action="inventario.php">
                     <h3>Actualizar stock y precios</h3>
-                    <div style="margin-top: 1rem;">
+                    <div class="admin-list">
                         <?php foreach ($productos as $p): ?>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; align-items: center; padding: 0.75rem; border-bottom: 1px solid #eee;">
-                                <span><?= htmlspecialchars($p['nombre']) ?></span>
-                                <input type="number" step="0.01" min="0" name="edit_precio[<?= (int) $p['id'] ?>]" value="<?= htmlspecialchars($p['precio']) ?>" class="input" style="padding: 0.35rem;">
-                                <input type="number" min="0" name="edit_stock[<?= (int) $p['id'] ?>]" value="<?= (int) $p['stock'] ?>" class="input" style="padding: 0.35rem;">
-                                <button type="submit" name="eliminar_producto" value="<?= (int) $p['id'] ?>" class="btn btn-outline btn-sm">Eliminar</button>
+                            <div class="admin-row">
+                                <span class="admin-row-name"><?= htmlspecialchars($p['nombre']) ?></span>
+                                <div class="admin-row-fields">
+                                    <input type="number" step="0.01" min="0"
+                                           name="edit_precio[<?= (int) $p['id'] ?>]"
+                                           value="<?= htmlspecialchars($p['precio']) ?>"
+                                           class="input" aria-label="Precio de <?= htmlspecialchars($p['nombre']) ?>">
+                                    <input type="number" min="0"
+                                           name="edit_stock[<?= (int) $p['id'] ?>]"
+                                           value="<?= (int) $p['stock'] ?>"
+                                           class="input" aria-label="Stock de <?= htmlspecialchars($p['nombre']) ?>">
+                                    <button type="submit" form="delete-form" name="eliminar_producto" value="<?= (int) $p['id'] ?>" class="btn btn-outline btn-sm"
+                                            onclick="return confirm('¿Eliminar este producto?');">Eliminar</button>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <button type="submit" name="actualizar_stock" class="btn btn-primary" style="margin-top: 1rem;">Actualizar stock y precios</button>
+                    <button type="submit" name="actualizar_stock" class="btn btn-primary" style="margin-top: 1rem;">Guardar cambios</button>
                 </form>
             </div>
         </section>
     <?php endif; ?>
+</main>
 
-    <footer style="background-color: #1F2937; color: #fff; padding: 2rem 0; text-align: center;">
-        <div class="container">
-            <p>© <?= date('Y') ?> Abarrotería Los Nina — Tu tienda de barrio de confianza</p>
-        </div>
-    </footer>
-
-    <button id="chat-fab" class="chat-fab" aria-label="Abrir chat">💬</button>
-    <div id="chat-panel" class="chat-panel">
-        <div class="chat-header">
-            <h3>💬 Asistente Los Nina</h3>
-            <button id="chat-close" class="chat-close" aria-label="Cerrar chat">✕</button>
-        </div>
-        <div id="chat-body" class="chat-body"></div>
-        <div class="chat-footer">
-            <input id="chat-input" type="text" placeholder="Escribe tu mensaje...">
-            <button id="chat-send" class="btn btn-primary">➤</button>
-        </div>
-    </div>
-    <div id="toast-container" class="toast-container"></div>
-
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/chatbot-widget.js"></script>
-</body>
-</html>
+<?php require __DIR__ . '/partials/footer.php'; ?>

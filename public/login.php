@@ -1,10 +1,9 @@
 <?php
-// ============================================================
-// Abarrotería Los Nina — Login Admin
-// ============================================================
-
+define('LOS_NINA_APP', true);
 session_start();
 require_once __DIR__ . '/../config/database.php';
+
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -24,89 +23,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $error = 'Credenciales invalidas';
+    $error = 'Credenciales inválidas. Verifica tu email y contraseña.';
 }
 
+$titulo = 'Acceso administrador — Abarrotería Los Nina';
+$descripcion = 'Acceso al panel de administración de Abarrotería Los Nina.';
+$paginaActiva = 'login';
+require __DIR__ . '/partials/head.php';
+require __DIR__ . '/partials/navbar.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Abarrotería Los Nina</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
-    <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container navbar-inner">
-            <a href="index.php" class="navbar-logo">
-                <picture>
-                    <source type="image/webp" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.webp 320w">
-                    <source type="image/webp" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.webp 160w">
-                    <source type="image/png" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.png 320w">
-                    <source type="image/png" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.png 160w">
-                    <img src="assets/img/logo/logo-160.png" srcset="assets/img/logo/logo-160.png 160w, assets/img/logo/logo-320.png 320w" sizes="(max-width: 480px) 58px, 82px" width="82" height="56" alt="Abarrotería Los Nina" class="navbar-logo-img">
-                </picture>
-                Los Nina<span>.</span>
-            </a>
-            <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navbar-nav">☰</button>
-            <div class="navbar-nav" id="navbar-nav">
-                <a href="index.php">Inicio</a>
-                <a href="inventario.php">Inventario</a>
-                <a href="nosotros.php">Nosotros</a>
-                <a href="contacto.php">Contacto</a>
-                <a href="carrito.php" class="cart-link">🛒 <span class="cart-badge" id="cart-badge">0</span></a>
-            </div>
-        </div>
-    </nav>
 
+<main>
     <section class="section">
-        <div class="container" style="max-width: 480px;">
-            <h1 class="section-title">Acceso Admin</h1>
-            <?php if (isset($error)): ?>
-                <div class="toast error show" style="position: static; transform: none;"><?= htmlspecialchars($error) ?></div>
+        <div class="container auth-wrap">
+            <div class="page-header">
+                <h1>Acceso administrador</h1>
+                <p>Solo personal autorizado de la tienda.</p>
+            </div>
+
+            <?php if ($error !== ''): ?>
+                <div class="toast error show toast-inline" role="alert"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
-            <form method="POST" action="login.php" style="background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                <div style="margin-bottom: 1rem;">
+
+            <form method="POST" action="login.php" class="card form-stack">
+                <div>
                     <label for="email">Email</label>
-                    <input class="input" type="email" id="email" name="email" required>
+                    <input class="input" type="email" id="email" name="email" autocomplete="username" required>
                 </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label for="password">Password</label>
-                    <input class="input" type="password" id="password" name="password" required>
+                <div>
+                    <label for="password">Contraseña</label>
+                    <input class="input" type="password" id="password" name="password" autocomplete="current-password" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block btn-lg">Iniciar sesión</button>
             </form>
+
             <p class="text-muted text-center" style="margin-top: 1rem;">
                 <a href="index.php">← Volver al inicio</a>
             </p>
         </div>
     </section>
+</main>
 
-    <footer style="background-color: #1F2937; color: #fff; padding: 2rem 0; text-align: center;">
-        <div class="container">
-            <p>© <?= date('Y') ?> Abarrotería Los Nina — Tu tienda de barrio de confianza</p>
-        </div>
-    </footer>
-
-    <button id="chat-fab" class="chat-fab" aria-label="Abrir chat">💬</button>
-    <div id="chat-panel" class="chat-panel">
-        <div class="chat-header">
-            <h3>💬 Asistente Los Nina</h3>
-            <button id="chat-close" class="chat-close" aria-label="Cerrar chat">✕</button>
-        </div>
-        <div id="chat-body" class="chat-body"></div>
-        <div class="chat-footer">
-            <input id="chat-input" type="text" placeholder="Escribe tu mensaje...">
-            <button id="chat-send" class="btn btn-primary">➤</button>
-        </div>
-    </div>
-    <div id="toast-container" class="toast-container"></div>
-
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/chatbot-widget.js"></script>
-</body>
-</html>
+<?php require __DIR__ . '/partials/footer.php'; ?>
