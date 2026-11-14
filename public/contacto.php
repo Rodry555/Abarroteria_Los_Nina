@@ -36,31 +36,32 @@ require __DIR__ . '/partials/navbar.php';
 ?>
 
 <main>
-    <section class="section">
+    <section class="section reveal">
         <div class="container narrow-wrap">
-            <div class="page-header">
+            <div class="section-head">
+                <span class="eyebrow">Escríbenos</span>
                 <h1>Contacto</h1>
                 <p>¿Tienes una consulta o quieres hacer un pedido? Escríbenos.</p>
             </div>
 
             <?php if ($exito): ?>
-                <div class="toast success show toast-inline" role="status">Mensaje enviado con éxito. Te responderemos pronto.</div>
+                <div class="toast toast-inline success show" role="status">Mensaje enviado con éxito. Te responderemos pronto.</div>
             <?php endif; ?>
             <?php if ($error !== ''): ?>
-                <div class="toast error show toast-inline" role="alert"><?= htmlspecialchars($error) ?></div>
+                <div class="toast toast-inline error show" role="alert"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
-            <form method="POST" action="contacto.php" class="card form-stack" novalidate>
+            <form method="POST" action="contacto.php" class="card" novalidate>
                 <?= csrf_campo() ?>
-                <div>
+                <div class="form-group">
                     <label for="nombre">Nombre</label>
                     <input class="input" type="text" id="nombre" name="nombre" autocomplete="name" required>
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="email">Email</label>
                     <input class="input" type="email" id="email" name="email" autocomplete="email" required>
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="mensaje">Mensaje</label>
                     <textarea class="input" id="mensaje" name="mensaje" rows="5" required></textarea>
                 </div>
@@ -80,14 +81,14 @@ require __DIR__ . '/partials/navbar.php';
             });
             ?>
             <?php if (!empty($datosContacto)): ?>
-                <div class="card" style="margin-top: 1.5rem;">
+                <div class="card" style="margin-top: var(--s-6);">
                     <h3>Datos de la tienda</h3>
-                    <ul style="list-style: none; margin-top: 0.75rem;">
+                    <ul style="list-style: none; margin-top: var(--s-3);">
                         <?php foreach ($datosContacto as $etiqueta => $valor): ?>
-                            <li style="margin-bottom: 0.35rem;">
+                            <li style="margin-bottom: var(--s-2);">
                                 <strong><?= e($etiqueta) ?>:</strong>
                                 <?php if ($etiqueta === 'WhatsApp'): ?>
-                                    <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="text-link">
+                                    <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" style="color: var(--wa); font-weight: 500;">
                                         <?= e($valor) ?>
                                     </a>
                                 <?php else: ?>
@@ -96,9 +97,9 @@ require __DIR__ . '/partials/navbar.php';
                             </li>
                         <?php endforeach; ?>
                     </ul>
-                    <div style="margin-top: 1rem;">
-                        <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" style="vertical-align: middle; margin-right: 0.5rem;">
+                    <div style="margin-top: var(--s-4);">
+                        <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-wa btn-block">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
                                 <path d="M17.5 1.9C12.3 1.9 8.1 4.6 5.2 8.6L2 22l13.4-3.2C21.4 19.5 22 13.7 22 8.5 22 3.3 17.7 1.9 17.5 1.9z" fill="currentColor"/>
                                 <path d="M15 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" fill="#fff"/>
                             </svg>

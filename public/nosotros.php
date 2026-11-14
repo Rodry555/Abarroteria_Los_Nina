@@ -13,9 +13,10 @@ require __DIR__ . '/partials/navbar.php';
 ?>
 
 <main>
-    <section class="section">
+    <section class="section reveal">
         <div class="container narrow-wrap">
-            <div class="page-header">
+            <div class="section-head">
+                <span class="eyebrow">Nuestra historia</span>
                 <h1>¿Quiénes somos?</h1>
                 <p>Una tienda de barrio que crece contigo.</p>
             </div>
@@ -26,7 +27,7 @@ require __DIR__ . '/partials/navbar.php';
                 <p>En Los Nina creemos en la confianza, el trato cercano y la calidad de lo que vendemos. ¡Bienvenidos a la familia!</p>
             </div>
 
-            <div class="values-grid">
+            <div class="values-grid" style="margin-top: var(--s-8);">
                 <div class="value-item">
                     <h3>🤝 Trato cercano</h3>
                     <p>Te conocemos por tu nombre y te atendemos como en casa.</p>
@@ -54,11 +55,11 @@ require __DIR__ . '/partials/navbar.php';
             });
             ?>
             <?php if (!empty($datosTienda)): ?>
-                <div class="card" style="margin-top: 2rem;">
+                <div class="card" style="margin-top: var(--s-8);">
                     <h3>📌 Visítanos</h3>
-                    <ul style="list-style: none; margin-top: 0.75rem;">
+                    <ul style="list-style: none; margin-top: var(--s-3);">
                         <?php foreach ($datosTienda as $etiqueta => $valor): ?>
-                            <li style="margin-bottom: 0.35rem;">
+                            <li style="margin-bottom: var(--s-2);">
                                 <strong><?= e($etiqueta) ?>:</strong> <?= e($valor) ?>
                             </li>
                         <?php endforeach; ?>
@@ -67,9 +68,9 @@ require __DIR__ . '/partials/navbar.php';
             <?php endif; ?>
 
             <!-- Mapa de ubicación -->
-            <div class="card" style="margin-top: 2rem; overflow: hidden; border-radius: var(--r-lg);">
-                <h3 style="margin-bottom: 1rem;">📍 Nuestra ubicación</h3>
-                <div style="position: relative; width: 100%; aspect-ratio: 16/9; min-height: 300px; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border);">
+            <div class="card" style="margin-top: var(--s-8); overflow: hidden; border-radius: var(--r-lg);">
+                <h3 style="margin-bottom: var(--s-4);">📍 Nuestra ubicación</h3>
+                <div style="position: relative; width: 100%; aspect-ratio: 16/9; min-height: 300px; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line);">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.4110934541004!2d-68.2068755!3d-16.505330999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915ede4423daa549%3A0xffb92bd85c6d5602!2sBartolome%20Andrade%2C%20El%20Alto!5e0!3m2!1ses-419!2sbo!4v1794693516161!5m2!1ses-419!2sbo"
                         width="100%"

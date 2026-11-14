@@ -13,9 +13,10 @@ require __DIR__ . '/partials/navbar.php';
 ?>
 
 <main>
-    <section class="section">
+    <section class="section reveal">
         <div class="container">
-            <div class="page-header">
+            <div class="section-head">
+                <span class="eyebrow">Pedido</span>
                 <h1>Tu carrito</h1>
                 <p>Revisa tus productos, aplica un cupón y confirma tu pedido.</p>
             </div>
@@ -31,33 +32,31 @@ require __DIR__ . '/partials/navbar.php';
                     </div>
                 </div>
 
-                <aside class="cart-summary" aria-label="Resumen de compra">
+                <aside class="summary" aria-label="Resumen de compra">
                     <h3>Resumen de compra</h3>
-                    <div class="cart-summary-row">
+                    <div class="summary-row">
                         <span>Subtotal</span>
                         <span id="subtotal"><?= e(formato_moneda(0)) ?></span>
                     </div>
-                    <div class="cart-summary-row">
+                    <div class="summary-row">
                         <span>Descuento</span>
                         <span id="descuento">-<?= e(formato_moneda(0)) ?></span>
                     </div>
-                    <div class="cart-summary-row total">
+                    <div class="summary-row total">
                         <span>Total final</span>
-                        <span id="total-final"><?= e(formato_moneda(0)) ?></span>
+                        <span id="total-final" class="price"><?= e(formato_moneda(0)) ?></span>
                     </div>
 
-                    <hr>
-
-                    <form id="coupon-form">
-                        <label for="coupon-input">Código de cupón</label>
-                        <div class="coupon-row">
-                            <input class="input" type="text" id="coupon-input" placeholder="BIENVENIDO10" autocomplete="off">
-                            <button type="submit" id="coupon-btn" class="btn btn-primary">Aplicar</button>
-                        </div>
-                        <p id="coupon-applied-info" class="text-muted" style="margin-top: 0.5rem; font-size: 0.9rem;"></p>
-                    </form>
-
-                    <hr>
+                    <div class="coupon">
+                        <form id="coupon-form">
+                            <label for="coupon-input">Código de cupón</label>
+                            <div style="display: flex; gap: var(--s-2); width: 100%;">
+                                <input class="input" type="text" id="coupon-input" placeholder="BIENVENIDO10" autocomplete="off" style="flex: 1;">
+                                <button type="submit" id="coupon-btn" class="btn btn-secondary">Aplicar</button>
+                            </div>
+                            <p id="coupon-applied-info" class="text-muted" style="margin-top: var(--s-2); font-size: var(--fs-sm);"></p>
+                        </form>
+                    </div>
 
                     <form id="finalizar-form">
                         <button type="submit" id="finalizar-btn" class="btn btn-primary btn-lg btn-block">Finalizar compra</button>
@@ -88,7 +87,7 @@ require __DIR__ . '/partials/navbar.php';
             </div>
             <div class="purchase-detail">
                 <dt>Total</dt>
-                <dd id="purchase-total">—</dd>
+                <dd id="purchase-total" class="price">—</dd>
             </div>
         </dl>
 
@@ -96,7 +95,7 @@ require __DIR__ . '/partials/navbar.php';
 
         <div class="purchase-actions">
             <a href="inventario.php" class="btn btn-primary btn-lg">Seguir comprando</a>
-            <a href="index.php" class="btn btn-outline btn-lg">Volver al inicio</a>
+            <a href="index.php" class="btn btn-secondary btn-lg">Volver al inicio</a>
         </div>
     </div>
 </div>

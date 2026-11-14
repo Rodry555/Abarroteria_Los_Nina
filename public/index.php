@@ -32,7 +32,7 @@ require __DIR__ . '/partials/navbar.php';
     <?php if (!empty($mensajesFlash)): ?>
         <div class="container" style="padding-top: 1rem;">
             <?php foreach ($mensajesFlash as $mensaje): ?>
-                <div class="toast <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show toast-inline"
+                <div class="toast toast-inline <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show"
                      role="<?= $mensaje['tipo'] === 'error' ? 'alert' : 'status' ?>">
                     <?= e($mensaje['mensaje']) ?>
                 </div>
@@ -67,51 +67,65 @@ require __DIR__ . '/partials/navbar.php';
 
         <div class="hero-inner">
             <div class="hero-content">
-                <h1 id="hero-title" class="hero-title">Los Nina</h1>
-                <p class="hero-text">Abarrotería de barrio — todo lo que tu hogar necesita, en un solo lugar.</p>
+                <h1 id="hero-title" class="hero-title">Los Nina<span class="accent">.</span></h1>
+                <p class="hero-sub">Abarrotería de barrio — todo lo que tu hogar necesita, en un solo lugar.</p>
 
                 <div class="hero-actions">
                     <a href="inventario.php" class="btn btn-primary btn-lg">Ver productos</a>
-                    <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
+                    <a href="contacto.php" class="btn btn-light btn-lg">Contáctanos</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section">
+    <section class="section reveal">
         <div class="container">
-            <h2 class="section-title">Productos destacados</h2>
-            <p class="section-subtitle">Una selección de lo más pedido esta semana.</p>
+            <div class="section-head">
+                <span class="eyebrow">Destacados</span>
+                <h2>Lo que más se lleva en casa</h2>
+                <p>Productos de uso diario al mejor precio.</p>
+            </div>
 
             <?php if (empty($productosDestacados)): ?>
                 <p class="text-muted text-center">Todavía no hay productos destacados.</p>
             <?php else: ?>
-                <div class="grid-products">
+                <div class="product-grid">
                     <?php foreach ($productosDestacados as $p): ?>
-                        <article class="product-card cat-<?= (int) $p['categoria_id'] ?>">
-                            <div class="product-card-img" aria-hidden="true"><?= htmlspecialchars($p['emoji']) ?></div>
-                            <div class="product-card-body">
-                                <span class="product-category"><?= htmlspecialchars($p['categoria_nombre']) ?></span>
+                        <article class="product-card">
+                            <div class="product-media">
+                                <span class="badge badge-ok">Disponible</span>
+                                <span aria-hidden="true" style="font-size: 3.5rem;"><?= htmlspecialchars($p['emoji']) ?></span>
+                            </div>
+                            <div class="product-body">
                                 <h3 class="product-name"><?= htmlspecialchars($p['nombre']) ?></h3>
-                                <div class="product-price"><?= e(formato_moneda($p['precio'])) ?></div>
-                                <div class="product-stock available">Disponible</div>
-                                <div class="product-actions">
-                                    <button class="btn btn-primary btn-add"
-                                        data-id="<?= (int) $p['id'] ?>"
-                                        data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
-                                        data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
-                                        data-precio="<?= htmlspecialchars($p['precio']) ?>">
-                                        Agregar al carrito
-                                    </button>
-                                </div>
+                                <p class="product-meta"><?= htmlspecialchars($p['categoria_nombre']) ?></p>
+                                <p class="price"><small><?= e(simbolo_moneda()) ?></small><?= e(number_format((float)$p['precio'], 2, '.', '')) ?></p>
+                                <button class="btn btn-primary btn-block btn-add"
+                                    data-id="<?= (int) $p['id'] ?>"
+                                    data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
+                                    data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
+                                    data-precio="<?= htmlspecialchars($p['precio']) ?>">
+                                    Agregar al carrito
+                                </button>
                             </div>
                         </article>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
-            <div class="text-center" style="margin-top: 2rem;">
+            <div class="text-center" style="margin-top: var(--s-8);">
                 <a href="inventario.php" class="btn btn-secondary btn-lg">Ver inventario completo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Band -->
+    <section class="section--alt reveal">
+        <div class="container">
+            <div class="cta-band">
+                <h2 style="margin-bottom: var(--s-3);">¿Listo para tu pedido?</h2>
+                <p style="max-width: 48ch; margin: 0 auto var(--s-6); opacity: .9;">Escríbenos por WhatsApp y te atendemos al instante.</p>
+                <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-light btn-lg">Pedidos por WhatsApp</a>
             </div>
         </div>
     </section>

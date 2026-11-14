@@ -9,13 +9,15 @@ if (!defined('LOS_NINA_APP')) {
     <div class="container">
         <div class="footer-grid">
             <div class="footer-brand">
-                <picture>
-                    <source type="image/webp" srcset="assets/img/logo/logo-160.webp">
-                    <img src="assets/img/logo/logo-160.png" width="67" height="46" alt="Abarrotería Los Nina" loading="lazy" decoding="async">
-                </picture>
+                <img src="assets/img/logo/logo-160.png"
+                     width="64" height="64"
+                     alt="Abarrotería Los Nina"
+                     class="footer-logo"
+                     loading="lazy"
+                     decoding="async">
                 <div>
                     <strong><?= e(config_get('negocio_nombre', 'Abarrotería Los Nina')) ?></strong>
-                    <span><?= e(config_get('negocio_eslogan', 'Tu tienda de barrio de confianza')) ?></span>
+                    <p><?= e(config_get('negocio_eslogan', 'Tu tienda de barrio de confianza')) ?></p>
                 </div>
             </div>
 
