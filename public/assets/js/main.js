@@ -108,7 +108,11 @@ function updateBadge() {
 
 function formatPrice(value) {
     const num = parseFloat(value) || 0;
-    return 'S/ ' + num.toFixed(2);
+    const simbolo = (window.LOS_NINA && window.LOS_NINA.moneda) ? window.LOS_NINA.moneda : 'Bs';
+    return simbolo + ' ' + num.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
 
 function escapeHtml(value) {
@@ -179,10 +183,37 @@ function renderCart() {
             '</div>';
     }).join('');
 
+    const calculo = calcularDescuento(subtotal);
+    const total = subtotal - calculo.descuento;
+    setSummary(subtotal, calculo.descuento, total);
+
+    const appliedInfo = document.getElementById('coupon-applied-info');
+    if (appliedInfo) {
+        appliedInfo.textContent = calculo.aviso;
+    }
+}
+
+// Calcula el descuento respetando la compra mínima del cupón (igual que el servidor).
+function calcularDescuento(subtotal) {
     const coupon = getCoupon();
-    const descuento = coupon ? (subtotal * coupon.porcentaje_descuento) / 100 : 0;
-    const total = subtotal - descuento;
-    setSummary(subtotal, descuento, total);
+    if (!coupon) {
+        return { descuento: 0, aviso: '' };
+    }
+
+    const minimo = parseFloat(coupon.minimo_compra) || 0;
+    if (subtotal < minimo) {
+        return {
+            descuento: 0,
+            aviso: 'El cupón ' + coupon.codigo + ' requiere una compra mínima de ' + formatPrice(minimo) + '.'
+        };
+    }
+
+    const descuento = (subtotal * (parseFloat(coupon.porcentaje_descuento) || 0)) / 100;
+
+    return {
+        descuento: descuento,
+        aviso: 'Cupón ' + coupon.codigo + ' aplicado: ' + coupon.porcentaje_descuento + '% de descuento.'
+    };
 }
 
 function setSummary(subtotal, descuento, total) {
@@ -223,10 +254,15 @@ async function handleCoupon(event) {
         if (data.valido) {
             saveCoupon(data);
             renderCart();
-            if (appliedInfo) {
-                appliedInfo.textContent = 'Cupón aplicado: ' + data.porcentaje_descuento + '% de descuento';
+            const subtotalActual = getCart().reduce(function (sum, item) {
+                return sum + (parseFloat(item.precio) || 0) * (parseInt(item.cantidad) || 1);
+            }, 0);
+            const minimo = parseFloat(data.minimo_compra) || 0;
+            if (subtotalActual < minimo) {
+                showToast('Cupón válido: agrega ' + formatPrice(minimo - subtotalActual) + ' más para aprovecharlo', 'warning');
+            } else {
+                showToast('Cupón aplicado: ' + data.porcentaje_descuento + '%', 'success');
             }
-            showToast('Cupón aplicado: ' + data.porcentaje_descuento + '%', 'success');
         } else {
             saveCoupon(null);
             if (appliedInfo) {

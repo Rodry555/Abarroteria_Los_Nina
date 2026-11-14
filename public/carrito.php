@@ -3,6 +3,8 @@ define('LOS_NINA_APP', true);
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
+cabeceras_seguridad();
+
 $titulo = 'Tu carrito — Abarrotería Los Nina';
 $descripcion = 'Revisa tu carrito, aplica cupones y finaliza tu compra en Abarrotería Los Nina.';
 $paginaActiva = 'carrito';
@@ -33,15 +35,15 @@ require __DIR__ . '/partials/navbar.php';
                     <h3>Resumen de compra</h3>
                     <div class="cart-summary-row">
                         <span>Subtotal</span>
-                        <span id="subtotal">S/ 0.00</span>
+                        <span id="subtotal"><?= e(formato_moneda(0)) ?></span>
                     </div>
                     <div class="cart-summary-row">
                         <span>Descuento</span>
-                        <span id="descuento">-S/ 0.00</span>
+                        <span id="descuento">-<?= e(formato_moneda(0)) ?></span>
                     </div>
                     <div class="cart-summary-row total">
                         <span>Total final</span>
-                        <span id="total-final">S/ 0.00</span>
+                        <span id="total-final"><?= e(formato_moneda(0)) ?></span>
                     </div>
 
                     <hr>

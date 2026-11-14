@@ -14,8 +14,8 @@ if (!defined('LOS_NINA_APP')) {
                     <img src="assets/img/logo/logo-160.png" width="67" height="46" alt="Abarrotería Los Nina" loading="lazy" decoding="async">
                 </picture>
                 <div>
-                    <strong>Abarrotería Los Nina</strong>
-                    <span>Tu tienda de barrio de confianza</span>
+                    <strong><?= e(config_get('negocio_nombre', 'Abarrotería Los Nina')) ?></strong>
+                    <span><?= e(config_get('negocio_eslogan', 'Tu tienda de barrio de confianza')) ?></span>
                 </div>
             </div>
 
@@ -29,8 +29,16 @@ if (!defined('LOS_NINA_APP')) {
 
             <div class="footer-col">
                 <h4>Atención</h4>
-                <p>Lun a Sáb · 8:00 – 21:00</p>
-                <p>Domicilio en el barrio</p>
+                <p><?= e(config_get('horario', 'Lun a Sáb · 8:00 – 21:00')) ?></p>
+                <?php if (config_get('direccion') !== ''): ?>
+                    <p><?= e(config_get('direccion')) ?></p>
+                <?php endif; ?>
+                <?php if (config_get('ciudad') !== ''): ?>
+                    <p><?= e(config_get('ciudad')) ?></p>
+                <?php endif; ?>
+                <?php if (config_get('telefono') !== ''): ?>
+                    <p><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', config_get('telefono'))) ?>">📞 <?= e(config_get('telefono')) ?></a></p>
+                <?php endif; ?>
                 <p>Pedidos por el asistente 💬</p>
             </div>
         </div>

@@ -49,6 +49,15 @@ $enlaces = [
                <?= $paginaActiva === 'carrito' ? 'aria-current="page"' : '' ?>>
                 🛒<span class="cart-badge" id="cart-badge">0</span>
             </a>
+
+            <?php if (es_admin()): ?>
+                <a href="admin.php" class="<?= $paginaActiva === 'admin' ? 'is-active' : '' ?>"
+                   <?= $paginaActiva === 'admin' ? 'aria-current="page"' : '' ?>>Panel</a>
+                <form method="POST" action="logout.php" class="nav-logout">
+                    <?= csrf_campo() ?>
+                    <button type="submit" class="nav-logout-btn">Salir</button>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 </nav>

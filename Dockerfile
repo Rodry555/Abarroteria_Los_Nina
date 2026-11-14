@@ -3,6 +3,9 @@ FROM php:8.2-apache
 # Solo las extensiones que necesita nuestro stack (sin Composer, sin npm)
 RUN docker-php-ext-install pdo pdo_mysql
 
+# Configuración de PHP para producción (errores ocultos, sesiones endurecidas)
+COPY docker/php.ini /usr/local/etc/php/conf.d/zz-los-nina.ini
+
 # Copiar todo el proyecto
 COPY . /var/www/html/
 

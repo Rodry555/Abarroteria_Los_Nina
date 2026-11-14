@@ -1,0 +1,10 @@
+# Abarrotería Los Nina — reglas de Apache para /public
+# (El DocumentRoot del contenedor apunta aquí: este es el .htaccess que sí se carga)
+
+Options -Indexes
+DirectoryIndex index.php
+
+# Nunca servir respaldos, dumps ni archivos de configuración.
+<FilesMatch "\.(sql|md|ini|log|bak|env|sh)$">
+    Require all denied
+</FilesMatch>

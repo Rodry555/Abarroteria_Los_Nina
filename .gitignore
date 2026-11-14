@@ -8,6 +8,16 @@
 # Capturas y material visual temporal
 WhatsApp Image*.jpeg
 
+# Secretos y entornos locales (NUNCA versionar)
+.env
+.env.*
+!.env.example
+*.log
+
+# Caché de herramientas de agente
+.atl/
+
 # Recursos duplicados
 hero-recursos/
+/hero/
 recursos/

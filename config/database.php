@@ -44,4 +44,6 @@ try {
 define('NVIDIA_API_KEY', $NVIDIA_API_KEY);
 define('NVIDIA_URL', 'https://integrate.api.nvidia.com/v1/chat/completions');
 define('NVIDIA_MODEL', 'nvidia/nemotron-3.5-super-vl-120b-a12b');
-?>
+
+// Helpers compartidos: escapes, moneda, configuración, CSRF y sesión admin.
+require_once __DIR__ . '/helpers.php';

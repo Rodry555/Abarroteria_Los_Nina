@@ -3,6 +3,8 @@ define('LOS_NINA_APP', true);
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
+cabeceras_seguridad();
+
 $titulo = 'Nosotros — Abarrotería Los Nina';
 $descripcion = 'Conoce la historia y los valores de Abarrotería Los Nina, tu tienda de barrio de confianza.';
 $paginaActiva = 'nosotros';
@@ -38,6 +40,31 @@ require __DIR__ . '/partials/navbar.php';
                     <p>Pedidos simples y entrega en el barrio, sin complicaciones.</p>
                 </div>
             </div>
+
+            <?php
+            $datosTienda = [
+                'Dirección' => config_get('direccion'),
+                'Ciudad' => config_get('ciudad'),
+                'Horario' => config_get('horario'),
+                'Teléfono' => config_get('telefono'),
+                'Delivery' => config_get('costo_delivery'),
+            ];
+            $datosTienda = array_filter($datosTienda, static function ($valor) {
+                return trim((string) $valor) !== '';
+            });
+            ?>
+            <?php if (!empty($datosTienda)): ?>
+                <div class="card" style="margin-top: 2rem;">
+                    <h3>📌 Visítanos</h3>
+                    <ul style="list-style: none; margin-top: 0.75rem;">
+                        <?php foreach ($datosTienda as $etiqueta => $valor): ?>
+                            <li style="margin-bottom: 0.35rem;">
+                                <strong><?= e($etiqueta) ?>:</strong> <?= e($valor) ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 </main>

@@ -1,9 +1,12 @@
 -- ============================================================
 -- Abarrotería Los Nina — Esquema de Base de Datos
+-- Moneda: bolivianos (Bs). Precios y cupones en Bs.
+--
+-- IMPORTANTE (TiDB Cloud Serverless):
+--   No se puede crear la base de datos desde el SQL Editor.
+--   Selecciona la base existente (por ejemplo `github_sample`)
+--   antes de pegar este archivo.
 -- ============================================================
-
-CREATE DATABASE IF NOT EXISTS abarroteria_los_nina;
-USE abarroteria_los_nina;
 
 -- Categorías de productos
 CREATE TABLE categorias (
@@ -31,6 +34,7 @@ CREATE TABLE productos (
   stock INT NOT NULL DEFAULT 0,
   emoji VARCHAR(10) DEFAULT '📦',
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  KEY idx_productos_nombre (nombre),
   FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
 
@@ -43,6 +47,7 @@ CREATE TABLE compras (
   cupon_usado VARCHAR(50) NULL,
   fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   estado ENUM('pendiente', 'completada', 'cancelada') DEFAULT 'completada',
+  KEY idx_compras_fecha (fecha),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
@@ -66,6 +71,7 @@ CREATE TABLE reservas (
   cantidad INT NOT NULL,
   fecha_reserva TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   estado ENUM('pendiente', 'confirmada', 'cancelada') DEFAULT 'pendiente',
+  KEY idx_reservas_fecha (fecha_reserva),
   FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 
@@ -87,8 +93,25 @@ CREATE TABLE mensajes_contacto (
   fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Configuración editable del negocio (clave/valor)
+CREATE TABLE configuracion (
+  clave VARCHAR(50) PRIMARY KEY,
+  valor TEXT NOT NULL,
+  actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Intentos de login (límite de fuerza bruta)
+CREATE TABLE intentos_login (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ip VARCHAR(45) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  exito BOOLEAN NOT NULL DEFAULT FALSE,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  KEY idx_intentos_ip_fecha (ip, fecha)
+);
+
 -- ============================================================
--- Datos semilla
+-- Datos semilla (moneda: bolivianos)
 -- ============================================================
 
 -- Categorías (8)
@@ -102,82 +125,104 @@ INSERT INTO categorias (nombre) VALUES
 ('Enlatados'),
 ('Panadería');
 
--- Usuario admin
+-- Usuario admin (contraseña inicial: NinaBolivia#2026 — cámbiala desde el panel)
 INSERT INTO usuarios (nombre, email, password_hash, rol) VALUES
-('Admin Los Nina', 'admin@losnina.com', '$2y$10$VWaNXyZGwY/NlRCnPnJTb.u33VIjMAg9EPBmmHgSpAsFzfQ0ztqmS', 'admin');
+('Admin Los Nina', 'admin@losnina.com', '$2y$10$dIi/6qQ0Luj/zhM4E66P5erHA7VzHNYc4kB2AVwJaE.CpvNEdNrea', 'admin');
 
--- Cupones
+-- Cupones (montos en Bs)
 INSERT INTO cupones (codigo, porcentaje_descuento, minimo_compra, activo, expira_en) VALUES
 ('BIENVENIDO10', 10, 0, TRUE, NULL),
-('COMPRA20', 20, 50, TRUE, NULL),
+('COMPRA20', 20, 100, TRUE, NULL),
 ('NINA5', 5, 0, TRUE, DATE_ADD(CURDATE(), INTERVAL 30 DAY));
 
--- Productos (60)
+-- Configuración del negocio (completar desde el panel admin)
+INSERT INTO configuracion (clave, valor) VALUES
+('negocio_nombre', 'Abarrotería Los Nina'),
+('negocio_eslogan', 'Tu tienda de barrio de confianza'),
+('horario', 'Lun a Sáb · 8:00 – 21:00'),
+('moneda_simbolo', 'Bs'),
+('ciudad', ''),
+('direccion', ''),
+('telefono', ''),
+('whatsapp', ''),
+('email_contacto', ''),
+('costo_delivery', ''),
+('delivery_gratis_desde', '');
+
+-- Productos (60) — marcas y precios de referencia en bolivianos
 INSERT INTO productos (nombre, categoria_id, descripcion, precio, stock, emoji) VALUES
-('Arroz Extra 5kg', 1, 'Arroz premium extra tamaño familia', 22.90, 45, '🍚'),
-('Aceite Primor 1L', 1, 'Aceite vegetal premium', 8.90, 60, '🛢️'),
-('Azúcar Blanca 1kg', 1, 'Azúcar rubia blanca', 3.50, 80, '🍬'),
-('Sal Marina 500g', 1, 'Sal marina de mar', 2.50, 90, '🧂'),
-('Fideos 500g', 1, 'Fideos para sopa', 2.20, 95, '🍝'),
-('Papa 5kg', 1, 'Papa amarilla familiar', 4.80, 70, '🥔'),
-('Harina 1kg', 1, 'Harina de trigo', 3.90, 75, '🌾'),
-('Atún en Aceite 3L', 1, 'Atún seleccionado en aceite', 6.70, 55, '🐟'),
+-- Abarrotes (8)
+('Arroz Grano de Oro 5kg', 1, 'Arroz blanco de grano largo, bolsa familiar de 5 kg', 45.00, 40, '🍚'),
+('Aceite Fino 1L', 1, 'Aceite vegetal comestible, botella de 1 litro', 14.50, 55, '🛢️'),
+('Azúcar Blanca 1kg', 1, 'Azúcar refinada, bolsa de 1 kg', 8.00, 70, '🍬'),
+('Sal Emsal 1kg', 1, 'Sal yodada para cocina, bolsa de 1 kg', 3.50, 85, '🧂'),
+('Fideos Corbatas 500g', 1, 'Fideos de trigo para sopa y guisos', 6.00, 90, '🍝'),
+('Harina de Trigo 1kg', 1, 'Harina de trigo todo uso, bolsa de 1 kg', 7.50, 70, '🌾'),
+('Lentejas 1kg', 1, 'Lentejas secas seleccionadas, bolsa de 1 kg', 12.00, 55, '🫘'),
+('Arvejas Secas 1kg', 1, 'Arvejas secas partidas, bolsa de 1 kg', 10.00, 50, '🫛'),
 
-('Leche Gloria 1L', 2, 'Leche entera con vitaminas', 4.50, 100, '🥛'),
-('Yogur Natural 12 und', 2, 'Yogur natural sabor original', 5.90, 65, '🍶'),
-('Queso Fresco 500g', 2, 'Queso fresco artesanal', 7.20, 50, '🧀'),
-('Mantequilla 250g', 2, 'Mantequilla sin sal', 4.60, 58, '🧈'),
-('Miel 500g', 2, 'Miel natural de abeja', 6.40, 40, '🍯'),
-('Manzana 1kg', 2, 'Manzanas frescas del campo', 3.80, 72, '🍎'),
-('Plátano 1kg', 2, 'Plátanos maduros', 2.90, 85, '🍌'),
-('Crema Nata 200ml', 2, 'Crema de leche para cocinar', 3.50, 30, '🥛'),
+-- Lácteos (8)
+('Leche Pil Entera 1L', 2, 'Leche entera UHT, botella de 1 litro', 8.00, 90, '🥛'),
+('Leche Pil en Polvo 380g', 2, 'Leche en polvo entera, bolsa de 380 g', 15.00, 45, '🥛'),
+('Yogur Pil 1L', 2, 'Yogur natural cremoso, frasco de 1 litro', 12.50, 40, '🍶'),
+('Queso Fresco Menonita 500g', 2, 'Queso fresco artesanal de Santa Cruz', 22.00, 25, '🧀'),
+('Mantequilla Pil 200g', 2, 'Mantequilla con sal, tableta de 200 g', 14.00, 30, '🧈'),
+('Dulce de Leche Pil 500g', 2, 'Dulce de leche repostero, frasco de 500 g', 16.00, 35, '🍯'),
+('Crema de Leche Pil 200ml', 2, 'Crema espesa para cocinar y repostería', 11.00, 28, '🥛'),
+('Queso Crema 200g', 2, 'Queso crema untable, pote de 200 g', 13.50, 4, '🧀'),
 
-('Agua Mineral 1.5L x12', 3, 'Botellas de agua mineral', 9.90, 100, '💧'),
-('Coca-Cola 2L x6', 3, 'Seis botellas de Coca-Cola', 10.50, 90, '🥤'),
-('Inka Beer 330ml x12', 3, 'Cerveza artesanal', 14.90, 60, '🍺'),
-('Café Premium 500g', 3, 'Café gourmet en grano', 12.90, 48, '☕'),
-('Jugo de Naranja 1L x6', 3, 'Jugo natural de naranja', 11.90, 55, '🧃'),
-('Té Verde 80 und', 3, 'Té verde en saquitos', 6.80, 70, '🍵'),
-('Red Bull 250 x6', 3, 'Energéticas Red Bull', 18.90, 40, '🐂'),
+-- Bebidas (7)
+('Agua Fátima 2L', 3, 'Agua mineral sin gas, botella de 2 litros', 5.50, 80, '💧'),
+('Coca-Cola 2L', 3, 'Gaseosa Coca-Cola, botella de 2 litros', 13.00, 60, '🥤'),
+('Cerveza Paceña 330ml', 3, 'Cerveza rubia, botella de 330 ml', 10.00, 48, '🍺'),
+('Cerveza Taquiña 330ml', 3, 'Cerveza cochabambina, botella de 330 ml', 10.00, 44, '🍺'),
+('Café Copacabana 250g', 3, 'Café molido de los Yungas, bolsa de 250 g', 18.00, 35, '☕'),
+('Jugo Del Valle 1L', 3, 'Néctar de fruta, botella de 1 litro', 12.00, 45, '🧃'),
+('Fanta 2L', 3, 'Gaseosa sabor naranja, botella de 2 litros', 12.00, 42, '🥤'),
 
-('Detergente Ariel 1kg', 4, 'Detergente para ropa', 8.50, 80, '🧴'),
-('Cloro 1L', 4, 'Cloro para ropa', 2.80, 90, '🧪'),
-('Jabón Lavanda 500ml', 4, 'Jabón líquido lavanda', 5.50, 75, '🧼'),
-('Pañales 50 und', 4, 'Pañales para bebé', 22.90, 35, '👶'),
-('Papel Higiénico 4', 4, 'Papel higiénico', 6.90, 100, '🧻'),
-('Desinfectante Multiusos 500ml', 4, 'Desinfectante multiusos', 4.50, 65, '🧽'),
-('Suavizante Lavanda 750ml', 4, 'Suavizante con aroma lavanda', 5.20, 55, '🌸'),
+-- Limpieza (7)
+('Detergente Ariel 1kg', 4, 'Detergente en polvo para ropa, bolsa de 1 kg', 20.00, 55, '🧴'),
+('Cloro Clorox 1L', 4, 'Cloro desinfectante, botella de 1 litro', 9.00, 70, '🧪'),
+('Lavavajillas Magistral 500ml', 4, 'Lavavajillas líquido con aroma limón', 12.00, 40, '🧼'),
+('Jabón de Lavar 3 und', 4, 'Jabón en barra para ropa, pack de 3', 9.00, 65, '🧼'),
+('Papel Higiénico Scott 4 rollos', 4, 'Papel higiénico doble hoja, pack de 4', 12.00, 85, '🧻'),
+('Desinfectante Magistral 900ml', 4, 'Desinfectante multiusos, botella de 900 ml', 13.00, 50, '🧽'),
+('Suavizante Downy 750ml', 4, 'Suavizante de ropa, botella de 750 ml', 15.00, 45, '🌸'),
 
-('Shampoo 400ml', 5, 'Shampoo con proteína', 9.90, 85, '🧴'),
-('Acondicionador 400ml', 5, 'Acondicionador suave', 9.50, 80, '🧴'),
-('Cepillo Dental 120 und', 5, 'Cepillos dentales', 7.90, 60, '🪥'),
-('Desodorante Aerosol 150ml', 5, 'Desodorante spray', 6.50, 70, '💨'),
-('Toallitas Húmedas 8', 5, 'Toallitas húmedas', 8.90, 62, '🧻'),
-('Crema para Bebé 100g', 5, 'Crema para bebé', 12.90, 45, '🍼'),
-('Alcohol Isopropílico 70', 5, 'Alcohol isopropílico', 4.20, 80, '🧪'),
+-- Higiene (7)
+('Shampoo Sedal 340ml', 5, 'Shampoo para cabello normal, 340 ml', 18.00, 60, '🧴'),
+('Acondicionador Sedal 340ml', 5, 'Acondicionador suavizante, 340 ml', 18.00, 55, '🧴'),
+('Cepillo Dental Colgate 2 und', 5, 'Cepillos de dientes suaves, pack de 2', 12.00, 70, '🪥'),
+('Desodorante Rexona 150ml', 5, 'Desodorante en aerosol, 150 ml', 20.00, 50, '💨'),
+('Toallitas Húmedas 80 und', 5, 'Toallitas húmedas para bebé, 80 unidades', 14.00, 40, '🧻'),
+('Pañales Huggies 30 und', 5, 'Pañales desechables talla M, pack de 30', 55.00, 3, '👶'),
+('Alcohol 70% 500ml', 5, 'Alcohol etílico desinfectante, 500 ml', 10.00, 65, '🧪'),
 
-('Papas Fritas 150g x10', 6, 'Papas fritas bolsa familiar', 12.90, 70, '🍟'),
-('Chicharrón 500g', 6, 'Chicharrón de cerdo', 8.90, 50, '🥓'),
-('Maní Salado 400g', 6, 'Maní salado', 7.50, 60, '🥜'),
-('Chocolate 7.5g x24', 6, 'Chocolate para churros', 9.90, 85, '🍫'),
-('Galleta María 300g', 6, 'Galletas María', 3.50, 95, '🍪'),
-('Palomitas 100g x5', 6, 'Palomitas de maíz', 6.50, 75, '🍿'),
-('Alfajor 250g', 6, 'Alfajores mixtos', 8.90, 55, '🥠'),
-('Mix Frutas 500g', 6, 'Mix de frutas', 9.50, 40, '🍇'),
+-- Snacks (8)
+('Papas Fritas Lays 150g', 6, 'Papas fritas sabor natural, bolsa de 150 g', 15.00, 60, '🍟'),
+('Chicharrón Boliviano 250g', 6, 'Chicharrón de cerdo crocante, 250 g', 18.00, 35, '🥓'),
+('Maní Salado 400g', 6, 'Maní tostado y salado, bolsa de 400 g', 10.00, 55, '🥜'),
+('Chocolate Taboada 100g', 6, 'Chocolate boliviano relleno, tableta de 100 g', 12.00, 70, '🍫'),
+('Galleta de Agua 300g', 6, 'Galletas de agua, paquete de 300 g', 8.00, 80, '🍪'),
+('Palomitas de Maíz 100g', 6, 'Maíz pisingallo para microondas', 7.00, 65, '🍿'),
+('Alfajor Boliviano 6 und', 6, 'Alfajores de dulce de leche, pack de 6', 12.00, 45, '🥠'),
+('Mix Frutos Secos 500g', 6, 'Mezcla de nueces, pasas y almendras', 25.00, 30, '🍇'),
 
-('Sopa Fideos 300g', 7, 'Sopa de fideos', 3.50, 88, '🥘'),
-('Lentejas 400g', 7, 'Lentejas secas', 3.80, 65, '🫘'),
-('Frijoles 400g', 7, 'Frijoles negros', 3.60, 70, '🫘'),
-('Tomate 410g', 7, 'Tomate triturado', 2.60, 92, '🍅'),
-('Papa Enlatada 500g', 7, 'Papa enlatada', 4.20, 58, '🥔'),
-('Pollo Enlatado 400g', 7, 'Pollo enlatado', 7.90, 62, '🍗'),
-('Maíz Enlatado 400g', 7, 'Maíz enlatado', 3.40, 66, '🌽'),
+-- Enlatados (7)
+('Atún en Aceite 170g', 7, 'Atún en aceite vegetal, lata de 170 g', 12.00, 50, '🐟'),
+('Sardinas en Tomate 425g', 7, 'Sardinas en salsa de tomate, lata de 425 g', 15.00, 40, '🐟'),
+('Frijoles Enlatados 400g', 7, 'Frijoles cocidos, lata de 400 g', 9.00, 60, '🫘'),
+('Tomate Pelado 400g', 7, 'Tomates pelados enteros, lata de 400 g', 8.50, 55, '🍅'),
+('Maíz Dulce 400g', 7, 'Granos de maíz dulce, lata de 400 g', 9.00, 50, '🌽'),
+('Duraznos en Almíbar 820g', 7, 'Duraznos en almíbar, lata de 820 g', 18.00, 30, '🍑'),
+('Leche Condensada Pil 397g', 7, 'Leche condensada azucarada, 397 g', 16.00, 35, '🥛'),
 
-('Pan Blanco 800g', 8, 'Pan blanco', 3.90, 78, '🍞'),
-('Pan Integral 800g', 8, 'Pan integral', 4.20, 72, '🥖'),
-('Empanada de Carne 150g x6', 8, 'Empanadas de carne', 8.90, 64, '🥟'),
-('Croissant 4 und', 8, 'Croissants', 5.50, 40, '🥐'),
-('Pan Dulce 500g', 8, 'Pan dulce', 4.60, 50, '🍩'),
-('Torta de Chocolate 450g', 8, 'Torta de chocolate', 6.80, 35, '🎂'),
-('Pan de Ajo 400g', 8, 'Pan de ajo', 4.90, 45, '🍞'),
-('Bizcocho de Vainilla 300g', 8, 'Bizcocho de vainilla', 5.20, 42, '🍰');
+-- Panadería (8)
+('Pan de Molde Integral 500g', 8, 'Pan de molde integral, 500 g', 12.00, 40, '🍞'),
+('Pan Francés 6 und', 8, 'Pan francés crocante, pack de 6', 6.00, 60, '🥖'),
+('Empanada Salteña 6 und', 8, 'Salteñas de carne, pack de 6', 18.00, 24, '🥟'),
+('Cuñapé 6 und', 8, 'Cuñapé de queso, pack de 6', 15.00, 20, '🥐'),
+('Pan Dulce 500g', 8, 'Pan dulce artesanal, 500 g', 10.00, 35, '🍩'),
+('Torta de Chocolate 450g', 8, 'Torta de chocolate para compartir', 35.00, 12, '🎂'),
+('Bizcocho de Vainilla 300g', 8, 'Bizcocho esponjoso de vainilla', 18.00, 15, '🍰'),
+('Pan de Ajo 400g', 8, 'Pan de ajo con mantequilla', 13.00, 3, '🍞');

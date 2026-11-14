@@ -6,6 +6,8 @@
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
+cabeceras_seguridad();
+
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -132,5 +134,7 @@ try {
     ]);
 } catch (Exception $e) {
     $pdo->rollBack();
-    echo json_encode(['exito' => false, 'mensaje' => 'Error en la compra: ' . $e->getMessage()]);
+    // El detalle técnico va al log, nunca al cliente.
+    error_log('[compra-venta] ' . $e->getMessage());
+    echo json_encode(['exito' => false, 'mensaje' => 'No se pudo completar la compra. Revisa el stock e intenta de nuevo.']);
 }

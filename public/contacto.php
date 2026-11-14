@@ -3,6 +3,8 @@ define('LOS_NINA_APP', true);
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
+cabeceras_seguridad();
+
 $exito = false;
 $error = '';
 
@@ -11,7 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $mensaje = trim($_POST['mensaje'] ?? '');
 
-    if ($nombre !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $mensaje !== '') {
+    if (!csrf_validar()) {
+        $error = 'El formulario venció. Vuelve a intentarlo.';
+    } elseif ($nombre !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $mensaje !== '') {
         $stmt = $pdo->prepare('INSERT INTO mensajes_contacto (nombre, email, mensaje) VALUES (:nombre, :email, :mensaje)');
         $stmt->execute([
             ':nombre' => $nombre,
@@ -47,6 +51,7 @@ require __DIR__ . '/partials/navbar.php';
             <?php endif; ?>
 
             <form method="POST" action="contacto.php" class="card form-stack" novalidate>
+                <?= csrf_campo() ?>
                 <div>
                     <label for="nombre">Nombre</label>
                     <input class="input" type="text" id="nombre" name="nombre" autocomplete="name" required>
@@ -61,6 +66,31 @@ require __DIR__ . '/partials/navbar.php';
                 </div>
                 <button type="submit" class="btn btn-primary btn-block btn-lg">Enviar mensaje</button>
             </form>
+
+            <?php
+            $datosContacto = [
+                'Teléfono' => config_get('telefono'),
+                'WhatsApp' => config_get('whatsapp'),
+                'Dirección' => config_get('direccion'),
+                'Ciudad' => config_get('ciudad'),
+                'Horario' => config_get('horario'),
+            ];
+            $datosContacto = array_filter($datosContacto, static function ($valor) {
+                return trim((string) $valor) !== '';
+            });
+            ?>
+            <?php if (!empty($datosContacto)): ?>
+                <div class="card" style="margin-top: 1.5rem;">
+                    <h3>Datos de la tienda</h3>
+                    <ul style="list-style: none; margin-top: 0.75rem;">
+                        <?php foreach ($datosContacto as $etiqueta => $valor): ?>
+                            <li style="margin-bottom: 0.35rem;">
+                                <strong><?= e($etiqueta) ?>:</strong> <?= e($valor) ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 </main>

@@ -3,10 +3,7 @@ define('LOS_NINA_APP', true);
 session_start();
 require_once __DIR__ . '/../config/database.php';
 
-function formatPrice($value)
-{
-    return 'S/ ' . number_format((float) $value, 2, '.', '');
-}
+cabeceras_seguridad();
 
 $productosDestacados = [];
 try {
@@ -31,44 +28,66 @@ require __DIR__ . '/partials/navbar.php';
 ?>
 
 <main>
-    <section class="hero" aria-labelledby="hero-title">
+    <?php $mensajesFlash = flash_obtener(); ?>
+    <?php if (!empty($mensajesFlash)): ?>
+        <div class="container" style="padding-top: 1rem;">
+            <?php foreach ($mensajesFlash as $mensaje): ?>
+                <div class="toast <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show toast-inline"
+                     role="<?= $mensaje['tipo'] === 'error' ? 'alert' : 'status' ?>">
+                    <?= e($mensaje['mensaje']) ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
         <picture class="hero-bg">
-            <source media="(max-width: 600px)" type="image/webp" srcset="assets/img/hero/hero-mobile-480.webp 480w, assets/img/hero/hero-mobile-828.webp 828w" sizes="100vw">
-            <source media="(max-width: 600px)" type="image/jpeg" srcset="assets/img/hero/hero-mobile-480.jpg 480w, assets/img/hero/hero-mobile-828.jpg 828w" sizes="100vw">
-            <source media="(max-width: 1024px)" type="image/webp" srcset="assets/img/hero/hero-tablet-640.webp 640w, assets/img/hero/hero-tablet-960.webp 960w" sizes="100vw">
-            <source media="(max-width: 1024px)" type="image/jpeg" srcset="assets/img/hero/hero-tablet-640.jpg 640w, assets/img/hero/hero-tablet-960.jpg 960w" sizes="100vw">
-            <source type="image/webp" srcset="assets/img/hero/hero-desktop-640.webp 640w, assets/img/hero/hero-desktop-960.webp 960w, assets/img/hero/hero-desktop-1254.webp 1254w" sizes="100vw">
-            <img src="assets/img/hero/hero-desktop-960.jpg"
-                 srcset="assets/img/hero/hero-desktop-960.jpg 960w, assets/img/hero/hero-desktop-1254.jpg 1254w"
+            <!-- Móvil (≤600 px): recorte vertical 4:5 -->
+            <source media="(max-width: 600px)" type="image/webp"
+                    srcset="assets/img/hero/hero-mobile-414.webp 414w,
+                            assets/img/hero/hero-mobile-621.webp 621w" sizes="100vw">
+            <source media="(max-width: 600px)" type="image/jpeg"
+                    srcset="assets/img/hero/hero-mobile-414.jpg 414w,
+                            assets/img/hero/hero-mobile-621.jpg 621w" sizes="100vw">
+            <!-- Tablet (601–1024 px): recorte 4:3 -->
+            <source media="(max-width: 1024px)" type="image/webp"
+                    srcset="assets/img/hero/hero-tablet-768.webp 768w,
+                            assets/img/hero/hero-tablet-1033.webp 1033w" sizes="100vw">
+            <source media="(max-width: 1024px)" type="image/jpeg"
+                    srcset="assets/img/hero/hero-tablet-768.jpg 768w,
+                            assets/img/hero/hero-tablet-1033.jpg 1033w" sizes="100vw">
+            <!-- Escritorio (>1024 px): recorte 16:9 -->
+            <source type="image/webp"
+                    srcset="assets/img/hero/hero-desktop-800.webp 800w,
+                            assets/img/hero/hero-desktop-1033.webp 1033w" sizes="100vw">
+            <img src="assets/img/hero/hero-desktop-1033.jpg"
+                 srcset="assets/img/hero/hero-desktop-800.jpg 800w,
+                         assets/img/hero/hero-desktop-1033.jpg 1033w"
                  sizes="100vw"
-                 alt="Productos de abarrotería: lácteos, limpieza y papel"
-                 width="1254" height="705"
+                 alt="Estantes de la Abarrotería Los Nina con papel higiénico, limpieza y abarrotes"
+                 width="1033" height="581"
                  fetchpriority="high" decoding="async">
         </picture>
 
-        <div class="container hero-content">
-            <span class="hero-eyebrow">🏪 Tu tienda de barrio</span>
-            <h1 id="hero-title" class="hero-title">Todo lo que necesitas, a un clic de tu puerta.</h1>
-            <p class="hero-text">Abarrotes, lácteos, bebidas y productos de limpieza con la atención cercana de siempre. Pide por la web o pregúntale a nuestro asistente.</p>
+        <div class="hero-inner">
+            <div class="hero-content">
+                <span class="hero-eyebrow">Tu tienda de barrio</span>
+                <h1 id="hero-title" class="hero-title">
+                    Todo lo que tu hogar necesita, <span class="hero-accent">en un solo lugar</span>
+                </h1>
+                <p class="hero-text">Limpieza, papel, lácteos y abarrotes de uso diario, con la atención cercana de siempre.</p>
 
-            <div class="hero-actions">
-                <a href="inventario.php" class="btn btn-primary btn-lg">Ver productos</a>
-                <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
-            </div>
+                <div class="hero-actions">
+                    <a href="inventario.php" class="btn btn-accent btn-lg">Ver productos</a>
+                    <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
+                </div>
 
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <strong>+60</strong>
-                    <span>productos disponibles</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>8</strong>
-                    <span>categorías</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>100%</strong>
-                    <span>atención de barrio</span>
-                </div>
+                <ul class="hero-chips">
+                    <li>Limpieza</li>
+                    <li>Papel</li>
+                    <li>Lácteos</li>
+                    <li>Abarrotes</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -88,7 +107,7 @@ require __DIR__ . '/partials/navbar.php';
                             <div class="product-card-body">
                                 <span class="product-category"><?= htmlspecialchars($p['categoria_nombre']) ?></span>
                                 <h3 class="product-name"><?= htmlspecialchars($p['nombre']) ?></h3>
-                                <div class="product-price"><?= formatPrice($p['precio']) ?></div>
+                                <div class="product-price"><?= e(formato_moneda($p['precio'])) ?></div>
                                 <div class="product-stock available">Disponible</div>
                                 <div class="product-actions">
                                     <button class="btn btn-primary btn-add"
