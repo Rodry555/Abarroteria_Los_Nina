@@ -101,4 +101,5 @@ require __DIR__ . '/partials/navbar.php';
     </div>
 </div>
 
+<?php require __DIR__ . '/partials/whatsapp-fab.php'; ?>
 <?php require __DIR__ . '/partials/footer.php'; ?>

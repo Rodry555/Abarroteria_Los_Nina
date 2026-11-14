@@ -39,6 +39,9 @@ if (!defined('LOS_NINA_APP')) {
                 <?php if (config_get('telefono') !== ''): ?>
                     <p><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', config_get('telefono'))) ?>">📞 <?= e(config_get('telefono')) ?></a></p>
                 <?php endif; ?>
+                <?php if (config_get('whatsapp') !== ''): ?>
+                    <p><a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer">💬 <?= e(config_get('whatsapp')) ?></a></p>
+                <?php endif; ?>
                 <p>Pedidos por el asistente 💬</p>
             </div>
         </div>

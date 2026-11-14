@@ -26,7 +26,7 @@ $noindex = $noindex ?? false;
     <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?= (int) @filemtime(__DIR__ . '/../assets/css/style.css') ?>">
 
     <?php if ($preloadHero): ?>
         <link rel="preload" as="image" type="image/webp"

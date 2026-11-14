@@ -84,6 +84,28 @@ function monto_desde_input($valor): float
 }
 
 /**
+ * Devuelve solo dígitos del número de WhatsApp configurado.
+ * Quita espacios, guiones, paréntesis y el signo '+'.
+ * Default: +591 64049678 (Bolivia).
+ */
+function whatsapp_numero(): string
+{
+    $raw = config_get('whatsapp', '+591 64049678');
+    return preg_replace('/[^0-9]/', '', $raw);
+}
+
+/**
+ * Genera el enlace wa.me con mensaje precargado.
+ * $mensaje opcional; si se omite usa un default amigable.
+ */
+function whatsapp_enlace(?string $mensaje = null): string
+{
+    $numero = whatsapp_numero();
+    $texto = $mensaje ?? 'Hola, quiero hacer un pedido en Abarrotería Los Nina.';
+    return 'https://wa.me/' . $numero . '?text=' . rawurlencode($texto);
+}
+
+/**
  * Token CSRF de la sesión (se genera en el primer uso).
  */
 function csrf_token(): string
