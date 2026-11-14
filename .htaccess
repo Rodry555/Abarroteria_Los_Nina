@@ -1,0 +1,22 @@
+# Abarrotería Los Nina — Seguridad básica
+
+RewriteEngine On
+
+# Denegar acceso directo a carpetas sensibles
+<Directory "/config">
+    Require all denied
+</Directory>
+
+<Directory "/sql">
+    Require all denied
+</Directory>
+
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)$ /index.php [L]
+</IfModule>
