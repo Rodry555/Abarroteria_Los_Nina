@@ -420,11 +420,11 @@ function buildProductCard(p) {
 
     const safeId = parseInt(p.id) || 0;
     const addBtn = stock <= 0
-        ? '<button class="btn btn-primary btn-add" disabled>Agotado</button>'
-        : '<button class="btn btn-primary btn-add" data-id="' + safeId + '" data-nombre="' + escapeHtml(p.nombre) + '" data-emoji="' + escapeHtml(p.emoji || '') + '" data-precio="' + escapeHtml(p.precio) + '">Agregar al carrito</button>';
+        ? '<button class="btn btn-accent btn-add" disabled>Agotado</button>'
+        : '<button class="btn btn-accent btn-add" data-id="' + safeId + '" data-nombre="' + escapeHtml(p.nombre) + '" data-emoji="' + escapeHtml(p.emoji || '') + '" data-precio="' + escapeHtml(p.precio) + '">Agregar al carrito</button>';
 
     const reserveBtn = stock > 0
-        ? '<button class="btn btn-accent btn-reservar" data-id="' + safeId + '" data-cantidad="1" data-nombre="' + escapeHtml(p.nombre) + '">Reservar</button>'
+        ? '<button class="btn btn-secondary btn-reservar" data-id="' + safeId + '" data-cantidad="1" data-nombre="' + escapeHtml(p.nombre) + '">Reservar</button>'
         : '';
 
     return '' +

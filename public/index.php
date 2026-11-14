@@ -100,7 +100,7 @@ require __DIR__ . '/partials/navbar.php';
                                 <div class="product-price"><?= e(formato_moneda($p['precio'])) ?></div>
                                 <div class="product-stock available">Disponible</div>
                                 <div class="product-actions">
-                                    <button class="btn btn-primary btn-add"
+                                    <button class="btn btn-accent btn-add"
                                         data-id="<?= (int) $p['id'] ?>"
                                         data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
                                         data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
@@ -115,7 +115,7 @@ require __DIR__ . '/partials/navbar.php';
             <?php endif; ?>
 
             <div class="text-center" style="margin-top: 2rem;">
-                <a href="inventario.php" class="btn btn-primary btn-lg">Ver inventario completo</a>
+                <a href="inventario.php" class="btn btn-secondary btn-lg">Ver inventario completo</a>
             </div>
         </div>
     </section>
