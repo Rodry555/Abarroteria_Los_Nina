@@ -39,6 +39,9 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text-main);
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 h1, h2, h3, h4 {
@@ -71,6 +74,14 @@ h1, h2, h3, h4 {
 }
 
 .text-center {
+    text-align: center;
+}
+
+footer {
+    margin-top: auto;
+    background-color: #1F2937;
+    color: #fff;
+    padding: 2rem 0;
     text-align: center;
 }
 

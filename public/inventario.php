@@ -252,7 +252,6 @@ unset($_SESSION['admin_msg']);
             </div>
         </section>
     <?php endif; ?>
-</div>
 
     <footer style="background-color: #1F2937; color: #fff; padding: 2rem 0; text-align: center;">
         <div class="container">

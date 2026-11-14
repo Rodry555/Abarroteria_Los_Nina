@@ -76,6 +76,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </section>
 
+    <footer style="background-color: #1F2937; color: #fff; padding: 2rem 0; text-align: center;">
+        <div class="container">
+            <p>© <?= date('Y') ?> Abarrotería Los Nina — Tu tienda de barrio de confianza</p>
+        </div>
+    </footer>
+
+    <button id="chat-fab" class="chat-fab" aria-label="Abrir chat">💬</button>
+    <div id="chat-panel" class="chat-panel">
+        <div class="chat-header">
+            <h3>💬 Asistente Los Nina</h3>
+            <button id="chat-close" class="chat-close" aria-label="Cerrar chat">✕</button>
+        </div>
+        <div id="chat-body" class="chat-body"></div>
+        <div class="chat-footer">
+            <input id="chat-input" type="text" placeholder="Escribe tu mensaje...">
+            <button id="chat-send" class="btn btn-primary">➤</button>
+        </div>
+    </div>
+    <div id="toast-container" class="toast-container"></div>
+
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/chatbot-widget.js"></script>
 </body>
 </html>

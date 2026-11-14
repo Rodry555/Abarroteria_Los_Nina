@@ -3,7 +3,7 @@
 // En producción (Koyeb) las credenciales vienen de variables de entorno.
 // El fallback con valores vacíos es SOLO para no romper si alguien prueba local.
 
-$DATABASE_URL = getenv('DATABASE_URL') ?: 'mysql://XN6UxpJ9uFm6YyX.root:lpF53FuYKfMIGmQf@gateway01.sa-east-1.prod.aws.tidbcloud.com:4000/github_sample';
+$DATABASE_URL = getenv('DATABASE_URL') ?: '';
 $NVIDIA_API_KEY = getenv('NVIDIA_API_KEY') ?: '';
 
 if ($DATABASE_URL === '') {

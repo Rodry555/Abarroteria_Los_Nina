@@ -104,7 +104,7 @@ INSERT INTO categorias (nombre) VALUES
 
 -- Usuario admin
 INSERT INTO usuarios (nombre, email, password_hash, rol) VALUES
-('Admin Los Nina', 'admin@losnina.com', '$2y$10$abcdefghijklmnopqrstuuEZ4tpXm4W5SeJkDbuNdfJ.CF0.Wc2V2', 'admin');
+('Admin Los Nina', 'admin@losnina.com', '$2y$10$VWaNXyZGwY/NlRCnPnJTb.u33VIjMAg9EPBmmHgSpAsFzfQ0ztqmS', 'admin');
 
 -- Cupones
 INSERT INTO cupones (codigo, porcentaje_descuento, minimo_compra, activo, expira_en) VALUES
