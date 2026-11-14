@@ -3,7 +3,7 @@
 // En producción (Koyeb) las credenciales vienen de variables de entorno.
 // El fallback con valores vacíos es SOLO para no romper si alguien prueba local.
 
-$DATABASE_URL = getenv('DATABASE_URL') ?: '';
+$DATABASE_URL = getenv('DATABASE_URL') ?: 'mysql://XN6UxpJ9uFm6YyX.root:yxaMzbbH9JsEzDNX@gateway01.sa-east-1.prod.aws.tidbcloud.com:4000/sys';
 $NVIDIA_API_KEY = getenv('NVIDIA_API_KEY') ?: '';
 
 if ($DATABASE_URL === '') {
@@ -40,6 +40,8 @@ try {
     die('No se pudo conectar a la base de datos. Revisa DATABASE_URL.');
 }
 
-// Exponer la API key de NVIDIA para el chatbot (se usa en chatbot.php)
+// Exponer la API key y la configuracion de la API de NVIDIA para el chatbot
 define('NVIDIA_API_KEY', $NVIDIA_API_KEY);
+define('NVIDIA_URL', 'https://integrate.api.nvidia.com/v1/chat/completions');
+define('NVIDIA_MODEL', 'nvidia/nemotron-3.5-super-vl-120b-a12b');
 ?>

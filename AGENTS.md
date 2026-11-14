@@ -17,7 +17,7 @@ Construir el sitio web completo de una abarrotería llamada **"Los Nina"**. Es u
 | Frontend | HTML5 + CSS puro | — | Responsive, mobile-first |
 | Interactividad | JavaScript vanilla | ES6+ | Sin librerías, con fetch() |
 | Servidor web | Apache | 2.4+ | con `.htaccess` |
-| Chatbot IA | NVIDIA NIM API | Llama 3.1 8B | cURL nativo de PHP |
+| Chatbot IA | NVIDIA NIM API | Nemotron 3.5 Super VL 120B | cURL nativo de PHP |
 | Preprocesador CSS | SCSS (solo en desarrollo) | — | Compilar a CSS antes de entregar |
 
 ### 🚫 PROHIBIDO
@@ -217,7 +217,7 @@ CREATE TABLE mensajes_contacto (
 - Usa **cURL nativo de PHP** (NO GuzzleHTTP ni librerías externas).
 - Configuración:
   - URL: `https://integrate.api.nvidia.com/v1/chat/completions`
-  - Modelo: `meta/llama-3.1-8b-instruct`
+  - Modelo: `nvidia/nemotron-3.5-super-vl-120b-a12b`
   - API Key: constante `NVIDIA_API_KEY` en `config/database.php`
 - System prompt: "Eres el asistente de Abarrotería Los Nina. Ayudas con reservas, descuentos y consultas de stock. Responde en español, de forma amigable y concisa. Si el usuario quiere reservar un producto, responde confirmando y pide nombre y teléfono. Si pregunta por descuentos, menciona los cupones disponibles."
 - El bot consulta la BD para:
