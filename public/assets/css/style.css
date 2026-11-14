@@ -89,9 +89,8 @@ footer {
 /* Hero */
 .hero {
     background:
-        radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 45%),
-        radial-gradient(circle at 85% 70%, rgba(255, 152, 0, 0.22) 0%, rgba(255, 152, 0, 0) 50%),
-        linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+        linear-gradient(rgba(27, 94, 32, 0.82), rgba(27, 94, 32, 0.82)),
+        url('assets/img/hero-bg.jpeg') center / cover no-repeat;
     background-color: var(--color-primary);
     color: #fff;
     padding: 6rem 0;
@@ -153,6 +152,9 @@ footer {
 }
 
 .navbar-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--color-primary);
@@ -166,8 +168,7 @@ footer {
 .navbar-logo-img {
     height: 38px;
     width: auto;
-    display: inline-block;
-    vertical-align: middle;
+    display: block;
 }
 
 .navbar-nav {
