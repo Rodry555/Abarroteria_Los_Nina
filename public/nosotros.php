@@ -65,9 +65,25 @@ require __DIR__ . '/partials/navbar.php';
                     </ul>
                 </div>
             <?php endif; ?>
+
+            <!-- Mapa de ubicación -->
+            <div class="card" style="margin-top: 2rem; overflow: hidden; border-radius: var(--r-lg);">
+                <h3 style="margin-bottom: 1rem;">📍 Nuestra ubicación</h3>
+                <div style="position: relative; width: 100%; aspect-ratio: 16/9; min-height: 300px; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border);">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.4110934541004!2d-68.2068755!3d-16.505330999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915ede4423daa549%3A0xffb92bd85c6d5602!2sBartolome%20Andrade%2C%20El%20Alto!5e0!3m2!1ses-419!2sbo!4v1794693516161!5m2!1ses-419!2sbo"
+                        width="100%"
+                        height="100%"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        title="Ubicación de Abarrotería Los Nina">
+                    </iframe>
+                </div>
+            </div>
         </div>
     </section>
 </main>
 
-<?php require __DIR__ . '/partials/whatsapp-fab.php'; ?>
 <?php require __DIR__ . '/partials/footer.php'; ?>

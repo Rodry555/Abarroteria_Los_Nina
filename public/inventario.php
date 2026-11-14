@@ -95,7 +95,7 @@ require __DIR__ . '/partials/navbar.php';
                             <div class="product-price"><?= e(formato_moneda($p['precio'])) ?></div>
                             <div class="product-stock <?= $stockClass ?>"><?= $stockText ?></div>
                             <div class="product-actions">
-                                <button class="btn btn-accent btn-add"
+                                <button class="btn btn-primary btn-add"
                                     data-id="<?= (int) $p['id'] ?>"
                                     data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
                                     data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
@@ -104,7 +104,7 @@ require __DIR__ . '/partials/navbar.php';
                                     <?= $stock <= 0 ? 'Agotado' : 'Agregar al carrito' ?>
                                 </button>
                                 <?php if ($stock > 0): ?>
-                                    <button class="btn btn-secondary btn-reservar"
+                                    <button class="btn btn-tertiary btn-reservar"
                                         data-id="<?= (int) $p['id'] ?>"
                                         data-cantidad="1"
                                         data-nombre="<?= htmlspecialchars($p['nombre']) ?>">
@@ -120,5 +120,4 @@ require __DIR__ . '/partials/navbar.php';
     </section>
 </main>
 
-<?php require __DIR__ . '/partials/whatsapp-fab.php'; ?>
 <?php require __DIR__ . '/partials/footer.php'; ?>

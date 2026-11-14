@@ -67,15 +67,11 @@ require __DIR__ . '/partials/navbar.php';
 
         <div class="hero-inner">
             <div class="hero-content">
-                <span class="hero-eyebrow">Tu tienda de barrio</span>
-                <h1 id="hero-title" class="hero-title">
-                    <span class="hero-brand-kicker">Abarrotería</span>
-                    <span class="hero-brand-name">Los Nina</span>
-                </h1>
-                <p class="hero-text">Todo lo que tu hogar necesita, en un solo lugar.</p>
+                <h1 id="hero-title" class="hero-title">Los Nina</h1>
+                <p class="hero-text">Abarrotería de barrio — todo lo que tu hogar necesita, en un solo lugar.</p>
 
                 <div class="hero-actions">
-                    <a href="inventario.php" class="btn btn-accent btn-lg">Ver productos</a>
+                    <a href="inventario.php" class="btn btn-primary btn-lg">Ver productos</a>
                     <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
                 </div>
             </div>
@@ -100,7 +96,7 @@ require __DIR__ . '/partials/navbar.php';
                                 <div class="product-price"><?= e(formato_moneda($p['precio'])) ?></div>
                                 <div class="product-stock available">Disponible</div>
                                 <div class="product-actions">
-                                    <button class="btn btn-accent btn-add"
+                                    <button class="btn btn-primary btn-add"
                                         data-id="<?= (int) $p['id'] ?>"
                                         data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
                                         data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
@@ -121,5 +117,4 @@ require __DIR__ . '/partials/navbar.php';
     </section>
 </main>
 
-<?php require __DIR__ . '/partials/whatsapp-fab.php'; ?>
 <?php require __DIR__ . '/partials/footer.php'; ?>

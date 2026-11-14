@@ -26,10 +26,10 @@ $noindex = $noindex ?? false;
     <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
 
-    <!-- Fuentes: Plus Jakarta Sans (display) + Inter (UI) + JetBrains Mono (números) -->
+    <!-- Fuentes: Anton (display/letrero) + DM Sans (UI) + Space Mono (números) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css?v=<?= (int) @filemtime(__DIR__ . '/../assets/css/style.css') ?>">
 

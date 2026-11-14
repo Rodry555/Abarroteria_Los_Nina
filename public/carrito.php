@@ -60,7 +60,7 @@ require __DIR__ . '/partials/navbar.php';
                     <hr>
 
                     <form id="finalizar-form">
-                        <button type="submit" id="finalizar-btn" class="btn btn-accent btn-lg btn-block">Finalizar compra</button>
+                        <button type="submit" id="finalizar-btn" class="btn btn-primary btn-lg btn-block">Finalizar compra</button>
                     </form>
                 </aside>
             </div>
@@ -101,5 +101,4 @@ require __DIR__ . '/partials/navbar.php';
     </div>
 </div>
 
-<?php require __DIR__ . '/partials/whatsapp-fab.php'; ?>
 <?php require __DIR__ . '/partials/footer.php'; ?>
