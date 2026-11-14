@@ -44,28 +44,24 @@ require __DIR__ . '/partials/navbar.php';
         <picture class="hero-bg">
             <!-- Móvil (≤600 px): recorte vertical 4:5 -->
             <source media="(max-width: 600px)" type="image/webp"
-                    srcset="assets/img/hero/hero-mobile-414.webp 414w,
-                            assets/img/hero/hero-mobile-621.webp 621w" sizes="100vw">
-            <source media="(max-width: 600px)" type="image/jpeg"
-                    srcset="assets/img/hero/hero-mobile-414.jpg 414w,
-                            assets/img/hero/hero-mobile-621.jpg 621w" sizes="100vw">
+                    srcset="assets/img/hero/hero-mobile-828.webp">
+            <source media="(max-width: 600px)"
+                    srcset="assets/img/hero/hero-mobile-828.jpg">
             <!-- Tablet (601–1024 px): recorte 4:3 -->
             <source media="(max-width: 1024px)" type="image/webp"
-                    srcset="assets/img/hero/hero-tablet-768.webp 768w,
-                            assets/img/hero/hero-tablet-1033.webp 1033w" sizes="100vw">
-            <source media="(max-width: 1024px)" type="image/jpeg"
-                    srcset="assets/img/hero/hero-tablet-768.jpg 768w,
-                            assets/img/hero/hero-tablet-1033.jpg 1033w" sizes="100vw">
-            <!-- Escritorio (>1024 px): recorte 16:9 -->
+                    srcset="assets/img/hero/hero-tablet-1280.webp">
+            <source media="(max-width: 1024px)"
+                    srcset="assets/img/hero/hero-tablet-1280.jpg">
+            <!-- Escritorio (>1024 px): recorte 16:9 con dos densidades -->
             <source type="image/webp"
-                    srcset="assets/img/hero/hero-desktop-800.webp 800w,
-                            assets/img/hero/hero-desktop-1033.webp 1033w" sizes="100vw">
-            <img src="assets/img/hero/hero-desktop-1033.jpg"
-                 srcset="assets/img/hero/hero-desktop-800.jpg 800w,
-                         assets/img/hero/hero-desktop-1033.jpg 1033w"
+                    srcset="assets/img/hero/hero-desktop-1600.webp 1600w,
+                            assets/img/hero/hero-desktop-2066.webp 2066w" sizes="100vw">
+            <img src="assets/img/hero/hero-desktop-1600.jpg"
+                 srcset="assets/img/hero/hero-desktop-1600.jpg 1600w,
+                         assets/img/hero/hero-desktop-2066.jpg 2066w"
                  sizes="100vw"
                  alt="Estantes de la Abarrotería Los Nina con papel higiénico, limpieza y abarrotes"
-                 width="1033" height="581"
+                 width="2066" height="1162"
                  fetchpriority="high" decoding="async">
         </picture>
 
@@ -73,21 +69,15 @@ require __DIR__ . '/partials/navbar.php';
             <div class="hero-content">
                 <span class="hero-eyebrow">Tu tienda de barrio</span>
                 <h1 id="hero-title" class="hero-title">
-                    Todo lo que tu hogar necesita, <span class="hero-accent">en un solo lugar</span>
+                    <span class="hero-brand-kicker">Abarrotería</span>
+                    <span class="hero-brand-name">Los Nina</span>
                 </h1>
-                <p class="hero-text">Limpieza, papel, lácteos y abarrotes de uso diario, con la atención cercana de siempre.</p>
+                <p class="hero-text">Todo lo que tu hogar necesita, en un solo lugar.</p>
 
                 <div class="hero-actions">
                     <a href="inventario.php" class="btn btn-accent btn-lg">Ver productos</a>
                     <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
                 </div>
-
-                <ul class="hero-chips">
-                    <li>Limpieza</li>
-                    <li>Papel</li>
-                    <li>Lácteos</li>
-                    <li>Abarrotes</li>
-                </ul>
             </div>
         </div>
     </section>

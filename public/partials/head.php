@@ -30,9 +30,11 @@ $noindex = $noindex ?? false;
 
     <?php if ($preloadHero): ?>
         <link rel="preload" as="image" type="image/webp"
-              href="assets/img/hero/hero-desktop-1033.webp" media="(min-width: 1025px)">
+              imagesrcset="assets/img/hero/hero-desktop-1600.webp 1600w,
+                           assets/img/hero/hero-desktop-2066.webp 2066w"
+              imagesizes="100vw" media="(min-width: 1025px)">
         <link rel="preload" as="image" type="image/webp"
-              href="assets/img/hero/hero-mobile-621.webp" media="(max-width: 600px)">
+              href="assets/img/hero/hero-mobile-828.webp" media="(max-width: 600px)">
     <?php endif; ?>
 
     <script>
