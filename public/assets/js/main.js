@@ -279,6 +279,101 @@ async function handleCoupon(event) {
     }
 }
 
+/* Muestra la confirmación centrada tras una compra exitosa. */
+function openPurchaseSuccess(data) {
+    const modal = document.getElementById('purchase-success');
+    if (!modal) {
+        // Sin el modal en la página, al menos avisamos con el toast.
+        showToast('¡Compra realizada con éxito!', 'success');
+        return;
+    }
+
+    const pedido = document.getElementById('purchase-order');
+    const total = document.getElementById('purchase-total');
+    const nota = document.getElementById('purchase-discount');
+
+    if (pedido) {
+        pedido.textContent = '#' + (parseInt(data.compra_id, 10) || 0);
+    }
+    if (total) {
+        total.textContent = formatPrice(data.total);
+    }
+    if (nota) {
+        const descuento = parseFloat(data.descuento) || 0;
+        if (descuento > 0) {
+            nota.textContent = 'Incluye un descuento de ' + formatPrice(descuento) + '.';
+            nota.hidden = false;
+        } else {
+            nota.textContent = '';
+            nota.hidden = true;
+        }
+    }
+
+    const enfoquePrevio = document.activeElement;
+
+    modal.hidden = false;
+    document.body.classList.add('has-modal');
+    // Fuerza el reflow para que la transición de entrada sí se ejecute.
+    modal.getBoundingClientRect();
+    modal.classList.add('is-open');
+
+    const primerBoton = modal.querySelector('.purchase-actions .btn');
+    if (primerBoton) {
+        primerBoton.focus();
+    }
+
+    function cerrar() {
+        modal.classList.remove('is-open');
+        document.body.classList.remove('has-modal');
+        document.removeEventListener('keydown', alPresionarTecla);
+        modal.querySelectorAll('[data-close-purchase]').forEach(function (el) {
+            el.removeEventListener('click', cerrar);
+        });
+        window.setTimeout(function () {
+            modal.hidden = true;
+        }, 220);
+
+        const destino = document.querySelector('#cart-empty a') || document.querySelector('.navbar-logo');
+        if (destino && typeof destino.focus === 'function') {
+            destino.focus();
+        } else if (enfoquePrevio && typeof enfoquePrevio.focus === 'function') {
+            enfoquePrevio.focus();
+        }
+    }
+
+    function alPresionarTecla(event) {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            cerrar();
+            return;
+        }
+        if (event.key !== 'Tab') {
+            return;
+        }
+        const elementos = Array.prototype.slice.call(modal.querySelectorAll('.purchase-actions a'));
+        if (elementos.length === 0) {
+            return;
+        }
+        const primero = elementos[0];
+        const ultimo = elementos[elementos.length - 1];
+        if (elementos.indexOf(document.activeElement) === -1) {
+            event.preventDefault();
+            primero.focus();
+        } else if (event.shiftKey && document.activeElement === primero) {
+            event.preventDefault();
+            ultimo.focus();
+        } else if (!event.shiftKey && document.activeElement === ultimo) {
+            event.preventDefault();
+            primero.focus();
+        }
+    }
+
+    modal.querySelectorAll('[data-close-purchase]').forEach(function (el) {
+        el.addEventListener('click', cerrar);
+    });
+    document.addEventListener('keydown', alPresionarTecla);
+}
+
 async function handleFinalizar(event) {
     event.preventDefault();
     const cart = getCart();
@@ -304,7 +399,7 @@ async function handleFinalizar(event) {
         }
         if (data.exito) {
             clearLocalCartState();
-            showToast('¡Compra realizada con éxito!', 'success');
+            openPurchaseSuccess(data);
         } else {
             showToast(data.mensaje || 'Error al procesar la compra', 'error');
         }

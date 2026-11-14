@@ -16,6 +16,7 @@ WhatsApp Image*.jpeg
 
 # Caché de herramientas de agente
 .atl/
+.codegraph/
 
 # Recursos duplicados
 hero-recursos/

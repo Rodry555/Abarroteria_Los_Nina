@@ -1447,6 +1447,137 @@ table.data input[type="number"] {
     margin-bottom: 1.25rem;
 }
 
+/* 4.10b Compra exitosa (modal) -------------------------------- */
+body.has-modal {
+    overflow: hidden;
+}
+
+.purchase-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: grid;
+    place-items: center;
+    padding: var(--container-pad);
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+.purchase-modal[hidden] {
+    display: none;
+}
+
+.purchase-modal.is-open {
+    opacity: 1;
+}
+
+.purchase-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(9, 32, 14, 0.66);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+.purchase-card {
+    position: relative;
+    width: min(460px, 100%);
+    max-height: calc(100vh - 2 * var(--container-pad));
+    max-height: calc(100svh - 2 * var(--container-pad));
+    overflow-y: auto;
+    padding: clamp(1.75rem, 5vw, 2.5rem);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    transform: translateY(14px) scale(0.97);
+    transition: transform 260ms var(--ease);
+}
+
+.purchase-modal.is-open .purchase-card {
+    transform: none;
+}
+
+.purchase-icon {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary-dark);
+    font-size: 2.1rem;
+    line-height: 1;
+}
+
+.purchase-title {
+    font-size: clamp(1.3rem, 4vw, 1.65rem);
+    margin-bottom: 0.5rem;
+}
+
+.purchase-desc {
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+}
+
+.purchase-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0 0 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-primary-soft);
+}
+
+.purchase-detail dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.purchase-detail dd {
+    margin: 0.15rem 0 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--color-primary-dark);
+    overflow-wrap: anywhere;
+}
+
+.purchase-note {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+.purchase-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
+@media (min-width: 480px) {
+    .purchase-actions {
+        flex-direction: row;
+    }
+
+    .purchase-actions .btn {
+        flex: 1 1 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .purchase-modal,
+    .purchase-card {
+        transition: none;
+    }
+}
+
 /* 4.11 Footer ----------------------------------------------- */
 .site-footer {
     margin-top: auto;

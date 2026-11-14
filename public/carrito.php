@@ -68,4 +68,37 @@ require __DIR__ . '/partials/navbar.php';
     </section>
 </main>
 
+<div id="purchase-success" class="purchase-modal" hidden>
+    <div class="purchase-modal-backdrop" data-close-purchase></div>
+    <div class="purchase-card"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="purchase-success-title"
+         aria-describedby="purchase-success-desc">
+        <span class="purchase-icon" aria-hidden="true">✓</span>
+        <h2 id="purchase-success-title" class="purchase-title">¡Compra realizada con éxito!</h2>
+        <p id="purchase-success-desc" class="purchase-desc">
+            Registramos tu pedido. Nos pondremos en contacto para coordinar la entrega.
+        </p>
+
+        <dl class="purchase-details">
+            <div class="purchase-detail">
+                <dt>Pedido</dt>
+                <dd id="purchase-order">—</dd>
+            </div>
+            <div class="purchase-detail">
+                <dt>Total</dt>
+                <dd id="purchase-total">—</dd>
+            </div>
+        </dl>
+
+        <p id="purchase-discount" class="purchase-note" hidden></p>
+
+        <div class="purchase-actions">
+            <a href="inventario.php" class="btn btn-primary btn-lg">Seguir comprando</a>
+            <a href="index.php" class="btn btn-outline btn-lg">Volver al inicio</a>
+        </div>
+    </div>
+</div>
+
 <?php require __DIR__ . '/partials/footer.php'; ?>
