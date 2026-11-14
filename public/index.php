@@ -26,13 +26,23 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abarrotería Los Nina — Tu tienda de barrio de confianza</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
+    <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preload" as="image" type="image/webp" href="assets/img/hero/hero-desktop-960.webp" media="(min-width: 1025px)">
 </head>
 <body>
     <nav class="navbar">
         <div class="container navbar-inner">
             <a href="index.php" class="navbar-logo">
-                <img src="assets/img/logo.jpeg" alt="Los Nina" class="navbar-logo-img">
+                <picture>
+                    <source type="image/webp" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.webp 320w">
+                    <source type="image/webp" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.webp 160w">
+                    <source type="image/png" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.png 320w">
+                    <source type="image/png" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.png 160w">
+                    <img src="assets/img/logo/logo-160.png" srcset="assets/img/logo/logo-160.png 160w, assets/img/logo/logo-320.png 320w" sizes="(max-width: 480px) 58px, 82px" width="82" height="56" alt="Abarrotería Los Nina" class="navbar-logo-img">
+                </picture>
                 Los Nina<span>.</span>
             </a>
             <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navbar-nav">☰</button>
@@ -47,12 +57,20 @@ try {
     </nav>
 
     <section class="hero">
-        <div class="container">
-            <h1>Abarrotería Los Nina</h1>
-            <p>Tu tienda de barrio de confianza</p>
-            <div class="text-center">
-                <a href="inventario.php" class="btn btn-accent btn-lg">Ver productos</a>
-                <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
+        <picture class="hero-bg">
+            <source media="(max-width: 600px)" type="image/webp" srcset="assets/img/hero/hero-mobile-480.webp 480w, assets/img/hero/hero-mobile-828.webp 828w" sizes="100vw">
+            <source media="(max-width: 600px)" type="image/jpeg" srcset="assets/img/hero/hero-mobile-480.jpg 480w, assets/img/hero/hero-mobile-828.jpg 828w" sizes="100vw">
+            <source media="(max-width: 1024px)" type="image/webp" srcset="assets/img/hero/hero-tablet-640.webp 640w, assets/img/hero/hero-tablet-960.webp 960w" sizes="100vw">
+            <source media="(max-width: 1024px)" type="image/jpeg" srcset="assets/img/hero/hero-tablet-640.jpg 640w, assets/img/hero/hero-tablet-960.jpg 960w" sizes="100vw">
+            <source type="image/webp" srcset="assets/img/hero/hero-desktop-640.webp 640w, assets/img/hero/hero-desktop-960.webp 960w, assets/img/hero/hero-desktop-1254.webp 1254w" sizes="100vw">
+            <img src="assets/img/hero/hero-desktop-960.jpg" srcset="assets/img/hero/hero-desktop-960.jpg 960w, assets/img/hero/hero-desktop-1254.jpg 1254w" sizes="100vw" alt="Abarrotería Los Nina: productos de limpieza, papel, lácteos y más" width="1254" height="705" fetchpriority="high" decoding="async">
+        </picture>
+
+        <div class="hero-content">
+            <h1 class="sr-only">Abarrotería Los Nina</h1>
+            <div class="hero-actions">
+                <a href="inventario.php" class="btn btn-primary">Ver productos</a>
+                <a href="contacto.php" class="btn btn-outline">Contáctanos</a>
             </div>
         </div>
     </section>

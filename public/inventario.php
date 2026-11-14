@@ -114,13 +114,22 @@ unset($_SESSION['admin_msg']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario — Abarrotería Los Nina</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/logo/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
+    <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container navbar-inner">
             <a href="index.php" class="navbar-logo">
-                <img src="assets/img/logo.jpeg" alt="Los Nina" class="navbar-logo-img">
+                <picture>
+                    <source type="image/webp" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.webp 320w">
+                    <source type="image/webp" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.webp 160w">
+                    <source type="image/png" media="(min-width: 481px)" srcset="assets/img/logo/logo-320.png 320w">
+                    <source type="image/png" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.png 160w">
+                    <img src="assets/img/logo/logo-160.png" srcset="assets/img/logo/logo-160.png 160w, assets/img/logo/logo-320.png 320w" sizes="(max-width: 480px) 58px, 82px" width="82" height="56" alt="Abarrotería Los Nina" class="navbar-logo-img">
+                </picture>
                 Los Nina<span>.</span>
             </a>
             <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navbar-nav">☰</button>
