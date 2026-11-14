@@ -81,25 +81,30 @@ footer {
     margin-top: auto;
     background-color: #1F2937;
     color: #fff;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     text-align: center;
+    border-top: 4px solid var(--color-accent);
 }
 
 /* Hero */
 .hero {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    background:
+        radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 45%),
+        radial-gradient(circle at 85% 70%, rgba(255, 152, 0, 0.22) 0%, rgba(255, 152, 0, 0) 50%),
+        linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    background-color: var(--color-primary);
     color: #fff;
-    padding: 5rem 0;
+    padding: 6rem 0;
     text-align: center;
 }
 
 .hero h1 {
-    font-size: 3rem;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
     margin-bottom: 0.75rem;
 }
 
 .hero p {
-    font-size: 1.25rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.25rem);
     opacity: 0.9;
 }
 
@@ -158,6 +163,13 @@ footer {
     color: var(--color-accent);
 }
 
+.navbar-logo-img {
+    height: 38px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .navbar-nav {
     display: flex;
     align-items: center;
@@ -196,6 +208,20 @@ footer {
     padding: 0 4px;
 }
 
+.nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
 /* 4.2 Buttons & Inputs */
 .btn {
     display: inline-block;
@@ -213,19 +239,23 @@ footer {
 .btn-primary {
     background-color: var(--color-primary);
     color: #fff;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
     background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-accent {
     background-color: var(--color-accent);
     color: #fff;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-accent:hover {
     background-color: var(--color-accent-hover);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-outline {
@@ -295,8 +325,8 @@ label {
 }
 
 .product-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-6px);
 }
 
 .product-card-img {
@@ -649,5 +679,38 @@ label {
 @media (min-width: 1024px) {
     .grid-products {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .nav-toggle {
+        display: inline-flex;
+    }
+
+    .navbar-nav {
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 0.5rem 1rem 1rem;
+        background-color: var(--color-surface);
+        box-shadow: var(--shadow-md);
+    }
+
+    .navbar-nav.open {
+        display: flex;
+    }
+
+    .navbar-nav a {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .navbar-nav a:last-child {
+        border-bottom: none;
     }
 }

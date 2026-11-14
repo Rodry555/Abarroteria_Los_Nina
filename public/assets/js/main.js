@@ -421,12 +421,32 @@ function initAddToCart() {
     });
 }
 
+function initNavToggle() {
+    const toggle = document.getElementById('nav-toggle');
+    const nav = document.getElementById('navbar-nav');
+    if (!toggle || !nav) {
+        return;
+    }
+    toggle.addEventListener('click', function () {
+        const isOpen = nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    nav.addEventListener('click', function (e) {
+        const link = e.target.closest('a');
+        if (link) {
+            nav.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
 function init() {
     updateBadge();
     renderCart();
     initSearch();
     initCategoryFilters();
     initAddToCart();
+    initNavToggle();
 
     const finalizarForm = document.getElementById('finalizar-form');
     if (finalizarForm) {

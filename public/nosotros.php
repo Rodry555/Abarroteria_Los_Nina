@@ -13,8 +13,12 @@ require_once __DIR__ . '/../config/database.php';
 <body>
     <nav class="navbar">
         <div class="container navbar-inner">
-            <a href="index.php" class="navbar-logo">Los Nina<span>.</span></a>
-            <div class="navbar-nav">
+            <a href="index.php" class="navbar-logo">
+                <img src="assets/img/logo.jpeg" alt="Los Nina" class="navbar-logo-img">
+                Los Nina<span>.</span>
+            </a>
+            <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navbar-nav">☰</button>
+            <div class="navbar-nav" id="navbar-nav">
                 <a href="index.php">Inicio</a>
                 <a href="inventario.php">Inventario</a>
                 <a href="nosotros.php">Nosotros</a>

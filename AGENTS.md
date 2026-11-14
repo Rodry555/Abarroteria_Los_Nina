@@ -28,7 +28,7 @@ Construir el sitio web completo de una abarrotería llamada **"Los Nina"**. Es u
 - Composer / dependencias de PHP (Guzzle, etc.)
 - npm / dependencias de JS (jQuery, Bootstrap, Tailwind, etc.)
 - APIs de IA externas distintas a NVIDIA NIM
-- Imágenes externas (usar emojis o placeholders CSS)
+- Imágenes locales (ej. logo en public/assets/img/)
 
 ---
 
@@ -326,7 +326,7 @@ Generar un README con estos pasos exactos (ver `DEPLOYMENT.md` para la estrategi
 - **NO preguntar pasos intermedios**. Generar todo el código de una vez.
 - **NO usar dependencias externas** (ni composer, ni npm).
 - **NO incluir archivos .scss sueltos**. Entregar solo `style.css` compilado y funcional.
-- **NO usar imágenes externas**. Para los productos, usar emojis (🍚, 🥛, 🧴, etc.) o placeholders CSS.
+- **NO usar imágenes externas**. Para los productos, usar emojis o placeholders CSS. Excepcion: el logo local del proyecto (public/assets/img/).
 - **TODO el código en español** (variables, comentarios, mensajes al usuario).
 - **El chatbot DEBE usar cURL nativo de PHP** para llamar a NVIDIA NIM API. NO usar GuzzleHTTP ni librerías externas.
 - **Las transacciones de compra DEBEN usar PDO con BEGIN/COMMIT/ROLLBACK**.
