@@ -28,16 +28,25 @@ require __DIR__ . '/partials/navbar.php';
             </div>
 
             <div class="values-grid" style="margin-top: var(--s-8);">
-                <div class="value-item">
-                    <h3>🤝 Trato cercano</h3>
+                <div class="value-item" style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-3);">
+                    <div style="width: 48px; height: 48px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Trato cercano</h3>
                     <p>Te conocemos por tu nombre y te atendemos como en casa.</p>
                 </div>
-                <div class="value-item">
-                    <h3>🌿 Productos frescos</h3>
+                <div class="value-item" style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-3);">
+                    <div style="width: 48px; height: 48px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a5 5 0 0 1 5 5c0 2.5-2 4.5-3 5.5-1 1-3 3-5 5s-4-2-5-5c-1-1-3-3-3-5.5a5 5 0 0 1 5-5z"/><path d="M9 12h6"/></svg>
+                    </div>
+                    <h3>Productos frescos</h3>
                     <p>Seleccionamos lo mejor cada día para tu mesa.</p>
                 </div>
-                <div class="value-item">
-                    <h3>🚚 Cerca de ti</h3>
+                <div class="value-item" style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-3);">
+                    <div style="width: 48px; height: 48px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3>Cerca de ti</h3>
                     <p>Pedidos simples y entrega en el barrio, sin complicaciones.</p>
                 </div>
             </div>
@@ -56,11 +65,14 @@ require __DIR__ . '/partials/navbar.php';
             ?>
             <?php if (!empty($datosTienda)): ?>
                 <div class="card" style="margin-top: var(--s-8);">
-                    <h3>📌 Visítanos</h3>
+                    <h3 style="display: flex; align-items: center; gap: var(--s-2);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Visítanos
+                    </h3>
                     <ul style="list-style: none; margin-top: var(--s-3);">
                         <?php foreach ($datosTienda as $etiqueta => $valor): ?>
-                            <li style="margin-bottom: var(--s-2);">
-                                <strong><?= e($etiqueta) ?>:</strong> <?= e($valor) ?>
+                            <li style="margin-bottom: var(--s-2); display: flex; align-items: center; gap: var(--s-2);">
+                                <strong style="min-width: 100px;"><?= e($etiqueta) ?>:</strong> <?= e($valor) ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>

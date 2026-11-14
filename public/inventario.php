@@ -41,7 +41,12 @@ if (isset($_GET['ajax'])) {
         $stmt->bindValue($clave, $valor, $tipo);
     }
     $stmt->execute();
-    echo json_encode($stmt->fetchAll());
+    $productos = $stmt->fetchAll();
+    // Agregar icono SVG a cada producto
+    foreach ($productos as &$prod) {
+        $prod['icon_svg'] = product_icon_svg((int)$prod['categoria_id']);
+    }
+    echo json_encode($productos);
     exit;
 }
 
@@ -92,7 +97,7 @@ require __DIR__ . '/partials/navbar.php';
                     <article class="product-card">
                         <div class="product-media">
                             <span class="badge <?= $badgeClass ?>"><?= $stockText ?></span>
-                            <span aria-hidden="true" style="font-size: 3.5rem;"><?= htmlspecialchars($p['emoji']) ?></span>
+                            <?= product_icon_svg((int)$p['categoria_id']) ?>
                         </div>
                         <div class="product-body">
                             <h3 class="product-name"><?= htmlspecialchars($p['nombre']) ?></h3>

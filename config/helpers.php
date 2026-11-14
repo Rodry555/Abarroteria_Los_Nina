@@ -187,3 +187,23 @@ function cabeceras_seguridad(bool $noIndex = false): void
         header('X-Robots-Tag: noindex, nofollow');
     }
 }
+
+/**
+ * Icono SVG de línea para categoría de producto.
+ * Estilo: trazo 1.75px, color --red-600, 56px, centrado.
+ * Categorías: 1=Abarrotes, 2=Lácteos, 3=Bebidas, 4=Limpieza, 5=Higiene, 6=Snacks, 7=Enlatados, 8=Panadería
+ */
+function product_icon_svg(int $categoriaId): string
+{
+    $icons = [
+        1 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l2.5-2.5L12 3l6.5 6.5L21 9"/><path d="M5 18c0 2.2 1.8 4 4 4h6c2.2 0 4-1.8 4-4v-5"/></svg>', // Abarrotes - grano/saco
+        2 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v18"/><path d="M10 3v18"/><path d="M14 3v18"/><path d="M18 3v18"/><rect x="4" y="3" width="16" height="18" rx="2"/></svg>', // Lácteos - botellas de leche
+        3 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v6"/><path d="M9 6h6"/><path d="M6 12c0-2.5 2-4.5 5-4.5s5 2 5 4.5"/><path d="M6 18c0 2.5 2 4.5 5 4.5s5-2 5-4.5"/></svg>', // Bebidas - vasos
+        4 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M12 3v6"/><path d="M7 15l5-5 5 5"/></svg>', // Limpieza - spray
+        5 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a5 5 0 0 1 5 5c0 2.5-2 4.5-3 5.5-1 1-3 3-5 5s-4-2-5-5c-1-1-3-3-3-5.5a5 5 0 0 1 5-5z"/><path d="M9 12h6"/></svg>', // Higiene - jabón/champú
+        6 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 9v6"/><path d="M9 12h6"/></svg>', // Snacks - paquete/bolsa
+        7 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 12h10"/><path d="M12 8v8"/></svg>', // Enlatados - lata
+        8 => '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18c0-3 2.5-5.5 5-6 2.5.5 5 3 5 6"/><path d="M16 12c0 3-2.5 5.5-5 6-2.5-.5-5-3-5-6"/></svg>', // Panadería - panes
+    ];
+    return $icons[$categoriaId] ?? $icons[1];
+}
