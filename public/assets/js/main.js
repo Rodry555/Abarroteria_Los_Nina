@@ -438,7 +438,7 @@ function buildProductCard(p) {
         : '';
 
     const simbolo = (window.LOS_NINA && window.LOS_NINA.moneda) ? window.LOS_NINA.moneda : 'Bs';
-    const iconSvg = p.icon_svg || '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#D62828" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 9v6"/><path d="M9 12h6"/></svg>';
+    const iconSvg = p.icon_svg || '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 9v6"/><path d="M9 12h6"/></svg>';
 
     return '' +
         '<article class="product-card">' +

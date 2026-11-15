@@ -93,18 +93,21 @@ require __DIR__ . '/partials/navbar.php';
                     $stockClass = $stock > 5 ? 'available' : ($stock > 0 ? 'low' : 'out');
                     $stockText = $stock > 5 ? 'Disponible' : ($stock > 0 ? '¡Últimas ' . $stock . ' unidades!' : 'Agotado');
                     $badgeClass = $stock > 5 ? 'badge-ok' : ($stock > 0 ? 'badge-low' : 'badge-out');
+                    $pid = (int) $p['id'];
+                    $formId = 'prod-' . $pid;
                     ?>
                     <article class="product-card">
                         <div class="product-media">
                             <span class="badge <?= $badgeClass ?>"><?= $stockText ?></span>
-                            <?= product_icon_svg((int)$p['categoria_id']) ?>
+                            <input class="input" type="text" form="<?= e($formId) ?>" name="emoji"
+                                   value="<?= e($p['emoji']) ?>" maxlength="8" aria-label="Emoji de <?= e($p['nombre']) ?>">
                         </div>
                         <div class="product-body">
                             <h3 class="product-name"><?= htmlspecialchars($p['nombre']) ?></h3>
                             <p class="product-meta"><?= htmlspecialchars($p['categoria_nombre']) ?></p>
                             <p class="price"><small><?= e(simbolo_moneda()) ?></small><?= e(number_format((float)$p['precio'], 2, '.', '')) ?></p>
                             <button class="btn btn-primary btn-block btn-add"
-                                data-id="<?= (int) $p['id'] ?>"
+                                data-id="<?= $pid ?>"
                                 data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
                                 data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
                                 data-precio="<?= htmlspecialchars($p['precio']) ?>"
@@ -113,7 +116,7 @@ require __DIR__ . '/partials/navbar.php';
                             </button>
                             <?php if ($stock > 0): ?>
                                 <button class="btn btn-secondary btn-reservar"
-                                    data-id="<?= (int) $p['id'] ?>"
+                                    data-id="<?= $pid ?>"
                                     data-cantidad="1"
                                     data-nombre="<?= htmlspecialchars($p['nombre']) ?>">
                                     Reservar
@@ -123,6 +126,14 @@ require __DIR__ . '/partials/navbar.php';
                     </article>
                 <?php endforeach; ?>
             </div>
+
+            <?php foreach ($productos as $p): ?>
+                <?php $pid = (int) $p['id']; ?>
+                <form id="prod-<?= $pid ?>" method="POST" action="admin.php?tab=productos">
+                    <?= csrf_campo() ?>
+                    <input type="hidden" name="id" value="<?= $pid ?>">
+                </form>
+            <?php endforeach; ?>
         </div>
     </section>
 </main>
