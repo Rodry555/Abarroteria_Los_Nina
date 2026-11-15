@@ -347,24 +347,21 @@ require __DIR__ . '/partials/navbar.php';
 ?>
 
 <main>
-    <section class="section reveal">
+    <section class="section admin-panel">
         <div class="container">
-            <div class="section-head">
-                <span class="eyebrow">Panel</span>
-                <h1>Panel de administración</h1>
-                <p>Sesión de <?= e(config_get('negocio_nombre', 'Abarrotería Los Nina')) ?></p>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--s-3); margin-bottom: var(--s-6);">
-                <div></div>
+            <div class="admin-topbar">
+                <div>
+                    <h1>Panel de administración</h1>
+                    <p class="admin-note">Sesión de <?= e(config_get('negocio_nombre', 'Abarrotería Los Nina')) ?></p>
+                </div>
                 <form method="POST" action="logout.php" class="admin-inline-form">
                     <?= csrf_campo() ?>
-                    <button type="submit" class="btn btn-secondary btn-sm">Cerrar sesión</button>
+                    <button type="submit" class="btn btn-outline btn-sm">Cerrar sesión</button>
                 </form>
             </div>
 
             <?php foreach ($flashMensajes as $mensaje): ?>
-                <div class="toast toast-inline <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show"
+                <div class="toast <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show toast-inline"
                      role="<?= $mensaje['tipo'] === 'error' ? 'alert' : 'status' ?>">
                     <?= e($mensaje['mensaje']) ?>
                 </div>
@@ -396,11 +393,11 @@ require __DIR__ . '/partials/navbar.php';
                         <?= csrf_campo() ?>
                         <input type="hidden" name="accion" value="producto_crear">
                         <div class="form-grid-3">
-                            <div class="form-group">
+                            <div>
                                 <label for="nuevo_nombre">Nombre</label>
                                 <input class="input" type="text" id="nuevo_nombre" name="nombre" maxlength="100" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="nuevo_categoria">Categoría</label>
                                 <select class="input" id="nuevo_categoria" name="categoria_id" required>
                                     <?php foreach ($categorias as $c): ?>
@@ -408,19 +405,19 @@ require __DIR__ . '/partials/navbar.php';
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="nuevo_precio">Precio (<?= e(simbolo_moneda()) ?>)</label>
                                 <input class="input" type="text" inputmode="decimal" id="nuevo_precio" name="precio" placeholder="12.50" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="nuevo_stock">Stock</label>
                                 <input class="input" type="number" min="0" id="nuevo_stock" name="stock" value="0" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="nuevo_emoji">Emoji</label>
                                 <input class="input" type="text" id="nuevo_emoji" name="emoji" value="📦" maxlength="8">
                             </div>
-                            <div class="form-group admin-full">
+                            <div class="admin-full">
                                 <label for="nuevo_descripcion">Descripción</label>
                                 <input class="input" type="text" id="nuevo_descripcion" name="descripcion" maxlength="255">
                             </div>
@@ -452,8 +449,6 @@ require __DIR__ . '/partials/navbar.php';
                                     $pid = (int) $p['id'];
                                     $formId = 'prod-' . $pid;
                                     $stock = (int) $p['stock'];
-                                    $badgeClass = $stock <= 0 ? 'badge-out' : ($stock < 5 ? 'badge-low' : 'badge-ok');
-                                    $badgeText = $stock <= 0 ? 'Agotado' : ($stock < 5 ? 'Bajo' : 'OK');
                                     ?>
                                     <tr>
                                         <td class="cell-emoji">
@@ -484,11 +479,15 @@ require __DIR__ . '/partials/navbar.php';
                                         <td>
                                             <input class="input" type="number" min="0" form="<?= e($formId) ?>" name="stock"
                                                    value="<?= $stock ?>" required aria-label="Stock de <?= e($p['nombre']) ?>">
-                                            <span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
+                                            <?php if ($stock <= 0): ?>
+                                                <span class="badge badge-out">Agotado</span>
+                                            <?php elseif ($stock < 5): ?>
+                                                <span class="badge badge-low">Bajo</span>
+                                            <?php endif; ?>
                                         </td>
                                         <td class="cell-actions">
                                             <button type="submit" form="<?= e($formId) ?>" name="accion" value="producto_actualizar" class="btn btn-primary btn-sm">Guardar</button>
-                                            <button type="submit" form="<?= e($formId) ?>" name="accion" value="producto_eliminar" class="btn btn-secondary btn-sm"
+                                            <button type="submit" form="<?= e($formId) ?>" name="accion" value="producto_eliminar" class="btn btn-outline btn-sm"
                                                     onclick="return confirm('¿Eliminar <?= e($p['nombre']) ?>? Esta acción no se puede deshacer.');">Eliminar</button>
                                         </td>
                                     </tr>
@@ -512,11 +511,11 @@ require __DIR__ . '/partials/navbar.php';
                     <form method="POST" action="admin.php?tab=categorias" class="form-grid-3">
                         <?= csrf_campo() ?>
                         <input type="hidden" name="accion" value="categoria_crear">
-                        <div class="form-group">
+                        <div>
                             <label for="categoria_nueva">Nombre</label>
                             <input class="input" type="text" id="categoria_nueva" name="nombre" maxlength="50" required>
                         </div>
-                        <div class="form-group" style="align-self: end">
+                        <div style="align-self: end">
                             <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>
                     </form>
@@ -577,23 +576,23 @@ require __DIR__ . '/partials/navbar.php';
                         <?= csrf_campo() ?>
                         <input type="hidden" name="accion" value="cupon_crear">
                         <div class="form-grid-3">
-                            <div class="form-group">
+                            <div>
                                 <label for="cupon_codigo">Código</label>
                                 <input class="input" type="text" id="cupon_codigo" name="codigo" maxlength="50" placeholder="VERANO15" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="cupon_pct">Descuento (%)</label>
                                 <input class="input" type="number" min="1" max="90" id="cupon_pct" name="porcentaje_descuento" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="cupon_minimo">Mínimo de compra (<?= e(simbolo_moneda()) ?>)</label>
                                 <input class="input" type="text" inputmode="decimal" id="cupon_minimo" name="minimo_compra" value="0">
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="cupon_expira">Expira en</label>
                                 <input class="input" type="date" id="cupon_expira" name="expira_en">
                             </div>
-                            <div class="form-group" style="align-self: end">
+                            <div style="align-self: end">
                                 <label style="display: flex; gap: 0.5rem; align-items: center;">
                                     <input type="checkbox" name="activo" checked> Activo
                                 </label>
@@ -642,7 +641,7 @@ require __DIR__ . '/partials/navbar.php';
                                         </td>
                                         <td class="cell-actions">
                                             <button type="submit" form="<?= e($formId) ?>" name="accion" value="cupon_actualizar" class="btn btn-primary btn-sm">Guardar</button>
-                                            <button type="submit" form="<?= e($formId) ?>" name="accion" value="cupon_eliminar" class="btn btn-secondary btn-sm"
+                                            <button type="submit" form="<?= e($formId) ?>" name="accion" value="cupon_eliminar" class="btn btn-outline btn-sm"
                                                     onclick="return confirm('¿Eliminar el cupón <?= e($c['codigo']) ?>?');">Eliminar</button>
                                         </td>
                                     </tr>
@@ -694,7 +693,7 @@ require __DIR__ . '/partials/navbar.php';
                                             <td><?= e(formato_moneda((float) $c['total'] + (float) $c['descuento_aplicado'])) ?></td>
                                             <td><?= e(formato_moneda($c['descuento_aplicado'])) ?></td>
                                             <td><?= $c['cupon_usado'] ? e($c['cupon_usado']) : '<span class="badge badge-muted">—</span>' ?></td>
-                                            <td><strong class="price"><?= e(formato_moneda($c['total'])) ?></strong></td>
+                                            <td><strong><?= e(formato_moneda($c['total'])) ?></strong></td>
                                             <td>
                                                 <form method="POST" action="admin.php?tab=pedidos" class="admin-inline-form">
                                                     <?= csrf_campo() ?>
@@ -712,7 +711,7 @@ require __DIR__ . '/partials/navbar.php';
                                                 <?php if (!empty($comprasDetalle[$cid])): ?>
                                                     <ul class="admin-note" style="list-style: none">
                                                         <?php foreach ($comprasDetalle[$cid] as $d): ?>
-                                                            <li><?= (int) $d['cantidad'] ?> × <?= e($d['nombre']) ?> · <span class="price"><?= e(formato_moneda($d['subtotal'])) ?></span></li>
+                                                            <li><?= (int) $d['cantidad'] ?> × <?= e($d['nombre']) ?> · <?= e(formato_moneda($d['subtotal'])) ?></li>
                                                         <?php endforeach; ?>
                                                     </ul>
                                                 <?php else: ?>
@@ -819,7 +818,7 @@ require __DIR__ . '/partials/navbar.php';
                         <input type="hidden" name="accion" value="config_actualizar">
                         <div class="form-grid-3">
                             <?php foreach (claves_configuracion() as $clave => $meta): ?>
-                                <div class="form-group">
+                                <div>
                                     <label for="cfg_<?= e($clave) ?>"><?= e($meta[0]) ?></label>
                                     <input class="input"
                                            type="<?= $meta[1] === 'email' ? 'email' : 'text' ?>"
@@ -840,19 +839,19 @@ require __DIR__ . '/partials/navbar.php';
                     <form method="POST" action="admin.php?tab=cuenta" class="form-grid-3">
                         <?= csrf_campo() ?>
                         <input type="hidden" name="accion" value="password_actualizar">
-                        <div class="form-group">
+                        <div>
                             <label for="password_actual">Contraseña actual</label>
                             <input class="input" type="password" id="password_actual" name="password_actual" autocomplete="current-password" required>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="password_nueva">Nueva contraseña</label>
                             <input class="input" type="password" id="password_nueva" name="password_nueva" autocomplete="new-password" minlength="8" required>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="password_repetir">Repetir nueva contraseña</label>
                             <input class="input" type="password" id="password_repetir" name="password_repetir" autocomplete="new-password" minlength="8" required>
                         </div>
-                        <div class="form-group" style="align-self: end">
+                        <div style="align-self: end">
                             <button type="submit" class="btn btn-primary">Actualizar contraseña</button>
                         </div>
                     </form>

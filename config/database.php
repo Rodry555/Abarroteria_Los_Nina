@@ -1,23 +1,23 @@
-<?php
-// Abarrotería Los Nina — Conexión PDO (formato moderno con DATABASE_URL)
-// En producción (Koyeb) las credenciales vienen de variables de entorno.
+﻿<?php
+// Abarroter├¡a Los Nina ÔÇö Conexi├│n PDO (formato moderno con DATABASE_URL)
+// En producci├│n (Koyeb) las credenciales vienen de variables de entorno.
 // Fallback local: si no hay DATABASE_URL, usa valores por defecto para desarrollo local.
 
 $DATABASE_URL = getenv('DATABASE_URL') ?: '';
 $NVIDIA_API_KEY = getenv('NVIDIA_API_KEY') ?: '';
 
-// Configuración local por defecto (solo si no hay DATABASE_URL)
+// Configuraci├│n local por defecto (solo si no hay DATABASE_URL)
 if ($DATABASE_URL === '') {
     // Desarrollo local: usa SQLite en archivo local o MySQL local
     // Descomenta la que uses:
     
-    // Opción A: SQLite local (archivo local, sin servidor)
+    // Opci├│n A: SQLite local (archivo local, sin servidor)
     $pdo = new PDO('sqlite:' . __DIR__ . '/../data/local.db', null, null, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
     
-    // Opción B: MySQL/MariaDB local (descomenta y configura)
+    // Opci├│n B: MySQL/MariaDB local (descomenta y configura)
     /*
     $pdo = new PDO(
         "mysql:host=127.0.0.1;port=3306;dbname=abarroteria;charset=utf8mb4",
@@ -55,7 +55,7 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    error_log('Error de conexión BD: ' . $e->getMessage());
+    error_log('Error de conexi├│n BD: ' . $e->getMessage());
     http_response_code(500);
     die('No se pudo conectar a la base de datos. Revisa DATABASE_URL.');
 }
@@ -66,5 +66,5 @@ define('NVIDIA_API_KEY', $NVIDIA_API_KEY);
 define('NVIDIA_URL', 'https://integrate.api.nvidia.com/v1/chat/completions');
 define('NVIDIA_MODEL', 'nvidia/nemotron-3.5-super-vl-120b-a12b');
 
-// Helpers compartidos: escapes, moneda, configuración, CSRF y sesión admin.
+// Helpers compartidos: escapes, moneda, configuraci├│n, CSRF y sesi├│n admin.
 require_once __DIR__ . '/helpers.php';

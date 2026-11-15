@@ -26,12 +26,7 @@ $noindex = $noindex ?? false;
     <link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo/favicon-192.png">
     <link rel="apple-touch-icon" href="assets/img/logo/favicon-192.png">
 
-    <!-- Fuentes: Plus Jakarta Sans (display) + DM Sans (UI) + Anton (hero) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="assets/css/style.css?v=<?= (int) @filemtime(__DIR__ . '/../assets/css/style.css') ?>">
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <?php if ($preloadHero): ?>
         <link rel="preload" as="image" type="image/webp"

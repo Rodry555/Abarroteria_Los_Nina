@@ -23,3 +23,6 @@ hero-recursos/
 /hero/
 /hero-diseño/
 recursos/
+
+# Scripts temporales de corrección
+fix_*.ps1

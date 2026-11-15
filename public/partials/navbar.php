@@ -11,11 +11,12 @@ $enlaces = [
     'inicio'     => ['href' => 'index.php', 'texto' => 'Inicio'],
     'inventario' => ['href' => 'inventario.php', 'texto' => 'Inventario'],
     'nosotros'   => ['href' => 'nosotros.php', 'texto' => 'Nosotros'],
+    'contacto'   => ['href' => 'contacto.php', 'texto' => 'Contacto'],
 ];
 ?>
-<header class="site-header" id="site-header" role="banner">
-    <div class="container header-inner">
-        <a href="index.php" class="brand" aria-label="Abarrotería Los Nina — Ir al inicio">
+<nav class="navbar" aria-label="Navegación principal">
+    <div class="container navbar-inner">
+        <a href="index.php" class="navbar-logo" aria-label="Abarrotería Los Nina — Ir al inicio">
             <picture>
                 <source type="image/webp" media="(max-width: 480px)" srcset="assets/img/logo/logo-160.webp">
                 <source type="image/webp" srcset="assets/img/logo/logo-320.webp">
@@ -23,11 +24,10 @@ $enlaces = [
                 <img src="assets/img/logo/logo-320.png"
                      width="76" height="52"
                      alt="Abarrotería Los Nina"
-                     class="brand-logo"
+                     class="navbar-logo-img"
                      fetchpriority="high"
                      decoding="async">
             </picture>
-            <span class="brand-name">Los Nina</span>
         </a>
 
         <button id="nav-toggle" class="nav-toggle"
@@ -35,41 +35,29 @@ $enlaces = [
                 aria-expanded="false"
                 aria-controls="navbar-nav">☰</button>
 
-        <nav class="nav" id="navbar-nav" aria-label="Navegación principal">
+        <div class="navbar-nav" id="navbar-nav">
             <?php foreach ($enlaces as $clave => $enlace): ?>
                 <a href="<?= htmlspecialchars($enlace['href']) ?>"
-                   class="<?= $paginaActiva === $clave ? 'active' : '' ?>"
+                   class="<?= $paginaActiva === $clave ? 'is-active' : '' ?>"
                    <?= $paginaActiva === $clave ? 'aria-current="page"' : '' ?>>
                     <?= htmlspecialchars($enlace['texto']) ?>
                 </a>
             <?php endforeach; ?>
 
-            <a href="carrito.php" class="cart-link<?= $paginaActiva === 'carrito' ? ' active' : '' ?>"
+            <a href="carrito.php" class="cart-link<?= $paginaActiva === 'carrito' ? ' is-active' : '' ?>"
                aria-label="Ver carrito"
                <?= $paginaActiva === 'carrito' ? 'aria-current="page"' : '' ?>>
                 🛒<span class="cart-badge" id="cart-badge">0</span>
             </a>
 
-            <a href="<?= e(whatsapp_enlace()) ?>"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="btn btn-wa btn-sm"
-               aria-label="Escribir por WhatsApp">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-                    <path d="M17.5 1.9C12.3 1.9 8.1 4.6 5.2 8.6L2 22l13.4-3.2C21.4 19.5 22 13.7 22 8.5 22 3.3 17.7 1.9 17.5 1.9z" fill="currentColor"/>
-                    <path d="M15 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" fill="#fff"/>
-                </svg>
-                WhatsApp
-            </a>
-
             <?php if (es_admin()): ?>
-                <a href="admin.php" class="<?= $paginaActiva === 'admin' ? 'active' : '' ?>"
+                <a href="admin.php" class="<?= $paginaActiva === 'admin' ? 'is-active' : '' ?>"
                    <?= $paginaActiva === 'admin' ? 'aria-current="page"' : '' ?>>Panel</a>
                 <form method="POST" action="logout.php" class="nav-logout">
                     <?= csrf_campo() ?>
                     <button type="submit" class="nav-logout-btn">Salir</button>
                 </form>
             <?php endif; ?>
-        </nav>
+        </div>
     </div>
-</header>
+</nav>

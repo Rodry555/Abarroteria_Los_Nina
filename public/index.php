@@ -32,7 +32,7 @@ require __DIR__ . '/partials/navbar.php';
     <?php if (!empty($mensajesFlash)): ?>
         <div class="container" style="padding-top: 1rem;">
             <?php foreach ($mensajesFlash as $mensaje): ?>
-                <div class="toast toast-inline <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show"
+                <div class="toast <?= $mensaje['tipo'] === 'error' ? 'error' : 'success' ?> show toast-inline"
                      role="<?= $mensaje['tipo'] === 'error' ? 'alert' : 'status' ?>">
                     <?= e($mensaje['mensaje']) ?>
                 </div>
@@ -67,101 +67,55 @@ require __DIR__ . '/partials/navbar.php';
 
         <div class="hero-inner">
             <div class="hero-content">
-                <h1 id="hero-title" class="hero-title"><span class="accent">Los Nina</span></h1>
-                <p class="hero-sub">Abarrotería de barrio — todo lo que tu hogar necesita, en un solo lugar.</p>
+                <span class="hero-eyebrow">Tu tienda de barrio</span>
+                <h1 id="hero-title" class="hero-title">
+                    <span class="hero-brand-kicker">Abarrotería</span>
+                    <span class="hero-brand-name">Los Nina</span>
+                </h1>
+                <p class="hero-text">Todo lo que tu hogar necesita, en un solo lugar.</p>
 
                 <div class="hero-actions">
-                    <a href="inventario.php" class="btn btn-primary btn-lg">Ver productos</a>
-                    <a href="contacto.php" class="btn btn-light btn-lg">Contáctanos</a>
+                    <a href="inventario.php" class="btn btn-accent btn-lg">Ver productos</a>
+                    <a href="contacto.php" class="btn btn-outline btn-lg">Contáctanos</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Productos Destacados -->
-    <section class="section reveal">
+    <section class="section">
         <div class="container">
-            <div class="section-head">
-                <span class="eyebrow">Destacados</span>
-                <h2>Lo que más se lleva en casa</h2>
-                <p>Productos de uso diario al mejor precio.</p>
-            </div>
+            <h2 class="section-title">Productos destacados</h2>
+            <p class="section-subtitle">Una selección de lo más pedido esta semana.</p>
 
             <?php if (empty($productosDestacados)): ?>
                 <p class="text-muted text-center">Todavía no hay productos destacados.</p>
             <?php else: ?>
-                <div class="product-grid">
+                <div class="grid-products">
                     <?php foreach ($productosDestacados as $p): ?>
-                        <article class="product-card">
-                            <div class="product-media">
-                                <span class="badge badge-ok">Disponible</span>
-                                <?= product_icon_svg((int)$p['categoria_id']) ?>
-                            </div>
-                            <div class="product-body">
+                        <article class="product-card cat-<?= (int) $p['categoria_id'] ?>">
+                            <div class="product-card-img" aria-hidden="true"><?= htmlspecialchars($p['emoji']) ?></div>
+                            <div class="product-card-body">
+                                <span class="product-category"><?= htmlspecialchars($p['categoria_nombre']) ?></span>
                                 <h3 class="product-name"><?= htmlspecialchars($p['nombre']) ?></h3>
-                                <p class="product-meta"><?= htmlspecialchars($p['categoria_nombre']) ?></p>
-                                <p class="price"><small><?= e(simbolo_moneda()) ?></small><?= e(number_format((float)$p['precio'], 2, '.', '')) ?></p>
-                                <button class="btn btn-primary btn-block btn-add"
-                                    data-id="<?= (int) $p['id'] ?>"
-                                    data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
-                                    data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
-                                    data-precio="<?= htmlspecialchars($p['precio']) ?>">
-                                    Agregar al carrito
-                                </button>
+                                <div class="product-price"><?= e(formato_moneda($p['precio'])) ?></div>
+                                <div class="product-stock available">Disponible</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-add"
+                                        data-id="<?= (int) $p['id'] ?>"
+                                        data-nombre="<?= htmlspecialchars($p['nombre']) ?>"
+                                        data-emoji="<?= htmlspecialchars($p['emoji']) ?>"
+                                        data-precio="<?= htmlspecialchars($p['precio']) ?>">
+                                        Agregar al carrito
+                                    </button>
+                                </div>
                             </div>
                         </article>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
-            <div class="text-center" style="margin-top: var(--s-8);">
-                <a href="inventario.php" class="btn btn-secondary btn-lg">Ver inventario completo</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Por qué elegirnos -->
-    <section class="section reveal">
-        <div class="container">
-            <div class="section-head">
-                <span class="eyebrow">Nuestra promesa</span>
-                <h2>Por qué elegirnos</h2>
-                <p>Tres razones para confiar en tu tienda de barrio.</p>
-            </div>
-
-            <div class="product-grid" style="grid-template-columns: repeat(3, 1fr); gap: var(--s-6);">
-                <div class="card" style="text-align: center; padding: var(--s-8) var(--s-4);">
-                    <div style="width: 56px; height: 56px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center; margin: 0 auto var(--s-4);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <h3 style="margin-bottom: var(--s-2);">Trato cercano</h3>
-                    <p style="color: var(--ink-2);">Te conocemos por tu nombre y te atendemos como en casa.</p>
-                </div>
-                <div class="card" style="text-align: center; padding: var(--s-8) var(--s-4);">
-                    <div style="width: 56px; height: 56px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center; margin: 0 auto var(--s-4);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a5 5 0 0 1 5 5c0 2.5-2 4.5-3 5.5-1 1-3 3-5 5s-4-2-5-5c-1-1-3-3-3-5.5a5 5 0 0 1 5-5z"/><path d="M9 12h6"/></svg>
-                    </div>
-                    <h3 style="margin-bottom: var(--s-2);">Productos frescos</h3>
-                    <p style="color: var(--ink-2);">Seleccionamos lo mejor cada día para tu mesa.</p>
-                </div>
-                <div class="card" style="text-align: center; padding: var(--s-8) var(--s-4);">
-                    <div style="width: 56px; height: 56px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center; margin: 0 auto var(--s-4);">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--red-600)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </div>
-                    <h3 style="margin-bottom: var(--s-2);">Cerca de ti</h3>
-                    <p style="color: var(--ink-2);">Pedidos simples y entrega en el barrio, sin complicaciones.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Band -->
-    <section class="section--alt reveal">
-        <div class="container">
-            <div class="cta-band">
-                <h2>¿Listo para tu pedido?</h2>
-                <p>Escríbenos por WhatsApp y te atendemos al instante.</p>
-                <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="btn">Pedidos por WhatsApp</a>
+            <div class="text-center" style="margin-top: 2rem;">
+                <a href="inventario.php" class="btn btn-primary btn-lg">Ver inventario completo</a>
             </div>
         </div>
     </section>

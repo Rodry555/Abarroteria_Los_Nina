@@ -61,7 +61,6 @@ function addToCart(productId, nombre, emoji, precio, cantidad) {
     updateBadge();
     renderCart();
     showToast('Producto agregado al carrito', 'success');
-    bumpCartBadge();
 }
 
 function removeFromCart(productId) {
@@ -107,14 +106,6 @@ function updateBadge() {
     });
 }
 
-function bumpCartBadge() {
-    document.querySelectorAll('.cart-badge').forEach(function (el) {
-        el.classList.remove('bump');
-        void el.offsetWidth; // reflow
-        el.classList.add('bump');
-    });
-}
-
 function formatPrice(value) {
     const num = parseFloat(value) || 0;
     const simbolo = (window.LOS_NINA && window.LOS_NINA.moneda) ? window.LOS_NINA.moneda : 'Bs';
@@ -126,10 +117,10 @@ function formatPrice(value) {
 
 function escapeHtml(value) {
     return String(value || '')
-        .replace(/&/g, '&')
-        .replace(/</g, '<')
-        .replace(/>/g, '>')
-        .replace(/"/g, '"');
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
 
 function showToast(mensaje, tipo) {
@@ -173,22 +164,21 @@ function renderCart() {
         const cantidad = parseInt(item.cantidad) || 1;
         const precio = parseFloat(item.precio) || 0;
         subtotal += precio * cantidad;
-        const simbolo = (window.LOS_NINA && window.LOS_NINA.moneda) ? window.LOS_NINA.moneda : 'Bs';
         return '' +
             '<div class="cart-item" data-id="' + item.id + '">' +
-                '<div class="cart-item__thumb">' + escapeHtml(item.emoji || '📦') + '</div>' +
-                '<div class="cart-item__info">' +
-                    '<span class="cart-item__name">' + escapeHtml(item.nombre) + '</span>' +
-                    '<span class="cart-item__unit">' + simbolo + ' ' + precio.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' c/u</span>' +
-                    '<div class="qty">' +
+                '<div class="cart-item-emoji">' + escapeHtml(item.emoji || '📦') + '</div>' +
+                '<div class="cart-item-info">' +
+                    '<span class="cart-item-name">' + escapeHtml(item.nombre) + '</span>' +
+                    '<span class="cart-item-price">' + formatPrice(precio) + ' c/u</span>' +
+                    '<div class="qty-control">' +
                         '<button type="button" class="qty-decrease" data-id="' + item.id + '" aria-label="Disminuir">−</button>' +
-                        '<output>' + cantidad + '</output>' +
+                        '<span>' + cantidad + '</span>' +
                         '<button type="button" class="qty-increase" data-id="' + item.id + '" aria-label="Aumentar">+</button>' +
                     '</div>' +
                 '</div>' +
-                '<div class="cart-item__side">' +
-                    '<span class="cart-item__total">' + formatPrice(precio * cantidad) + '</span>' +
-                    '<button type="button" class="link-remove" data-id="' + item.id + '">Eliminar</button>' +
+                '<div class="cart-item-actions">' +
+                    '<span class="cart-item-subtotal">' + formatPrice(precio * cantidad) + '</span>' +
+                    '<button type="button" class="btn btn-outline btn-sm remove-item" data-id="' + item.id + '">🗑️ Eliminar</button>' +
                 '</div>' +
             '</div>';
     }).join('');
@@ -343,7 +333,7 @@ function openPurchaseSuccess(data) {
             modal.hidden = true;
         }, 220);
 
-        const destino = document.querySelector('#cart-empty a') || document.querySelector('.brand');
+        const destino = document.querySelector('#cart-empty a') || document.querySelector('.navbar-logo');
         if (destino && typeof destino.focus === 'function') {
             destino.focus();
         } else if (enfoquePrevio && typeof enfoquePrevio.focus === 'function') {
@@ -360,7 +350,7 @@ function openPurchaseSuccess(data) {
         if (event.key !== 'Tab') {
             return;
         }
-        const elementos = Array.prototype.slice.call(modal.querySelectorAll('.purchase-actions .btn'));
+        const elementos = Array.prototype.slice.call(modal.querySelectorAll('.purchase-actions a'));
         if (elementos.length === 0) {
             return;
         }
@@ -426,31 +416,26 @@ function buildProductCard(p) {
     const stock = parseInt(p.stock) || 0;
     const stockClass = stock > 5 ? 'available' : (stock > 0 ? 'low' : 'out');
     const stockText = stock > 5 ? 'Disponible' : (stock > 0 ? '¡Últimas ' + stock + ' unidades!' : 'Agotado');
-    const badgeClass = stock > 5 ? 'badge-ok' : (stock > 0 ? 'badge-low' : 'badge-out');
+    const catId = parseInt(p.categoria_id) || 0;
 
     const safeId = parseInt(p.id) || 0;
     const addBtn = stock <= 0
-        ? '<button class="btn btn-primary btn-block btn-add" disabled>Agotado</button>'
-        : '<button class="btn btn-primary btn-block btn-add" data-id="' + safeId + '" data-nombre="' + escapeHtml(p.nombre) + '" data-emoji="' + escapeHtml(p.emoji || '') + '" data-precio="' + escapeHtml(p.precio) + '">Agregar al carrito</button>';
+        ? '<button class="btn btn-primary btn-add" disabled>Agotado</button>'
+        : '<button class="btn btn-primary btn-add" data-id="' + safeId + '" data-nombre="' + escapeHtml(p.nombre) + '" data-emoji="' + escapeHtml(p.emoji || '') + '" data-precio="' + escapeHtml(p.precio) + '">Agregar al carrito</button>';
 
     const reserveBtn = stock > 0
-        ? '<button class="btn btn-secondary btn-reservar" data-id="' + safeId + '" data-cantidad="1" data-nombre="' + escapeHtml(p.nombre) + '">Reservar</button>'
+        ? '<button class="btn btn-accent btn-reservar" data-id="' + safeId + '" data-cantidad="1" data-nombre="' + escapeHtml(p.nombre) + '">Reservar</button>'
         : '';
 
-    const simbolo = (window.LOS_NINA && window.LOS_NINA.moneda) ? window.LOS_NINA.moneda : 'Bs';
-    const iconSvg = p.icon_svg || '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 9v6"/><path d="M9 12h6"/></svg>';
-
     return '' +
-        '<article class="product-card">' +
-            '<div class="product-media">' +
-                '<span class="badge ' + badgeClass + '">' + stockText + '</span>' +
-                iconSvg +
-            '</div>' +
-            '<div class="product-body">' +
+        '<article class="product-card cat-' + catId + '">' +
+            '<div class="product-card-img" aria-hidden="true">' + escapeHtml(p.emoji || '📦') + '</div>' +
+            '<div class="product-card-body">' +
+                '<span class="product-category">' + escapeHtml(p.categoria_nombre || '') + '</span>' +
                 '<h3 class="product-name">' + escapeHtml(p.nombre) + '</h3>' +
-                '<p class="product-meta">' + escapeHtml(p.categoria_nombre || '') + '</p>' +
-                '<p class="price"><small>' + simbolo + '</small>' + escapeHtml(p.precio) + '</p>' +
-                addBtn + reserveBtn +
+                '<div class="product-price">' + formatPrice(p.precio) + '</div>' +
+                '<div class="product-stock ' + stockClass + '">' + stockText + '</div>' +
+                '<div class="product-actions">' + addBtn + reserveBtn + '</div>' +
             '</div>' +
         '</article>';
 }
@@ -554,7 +539,7 @@ function initAddToCart() {
         const decBtn = e.target.closest('.qty-decrease');
         if (decBtn) {
             e.preventDefault();
-            const qtyEl = decBtn.parentElement ? decBtn.parentElement.querySelector('output') : null;
+            const qtyEl = decBtn.parentElement ? decBtn.parentElement.querySelector('span') : null;
             const current = qtyEl ? (parseInt(qtyEl.textContent) || 1) : 1;
             setCartQty(parseInt(decBtn.getAttribute('data-id')) || 0, current - 1);
             return;
@@ -562,12 +547,12 @@ function initAddToCart() {
         const incBtn = e.target.closest('.qty-increase');
         if (incBtn) {
             e.preventDefault();
-            const qtyEl = incBtn.parentElement ? incBtn.parentElement.querySelector('output') : null;
+            const qtyEl = incBtn.parentElement ? incBtn.parentElement.querySelector('span') : null;
             const current = qtyEl ? (parseInt(qtyEl.textContent) || 1) : 1;
             setCartQty(parseInt(incBtn.getAttribute('data-id')) || 0, current + 1);
             return;
         }
-        const removeBtn = e.target.closest('.link-remove');
+        const removeBtn = e.target.closest('.remove-item');
         if (removeBtn) {
             e.preventDefault();
             removeFromCart(parseInt(removeBtn.getAttribute('data-id')) || 0);
@@ -616,41 +601,6 @@ function initNavToggle() {
     });
 }
 
-// Header scroll shadow
-function initHeaderScroll() {
-    const header = document.getElementById('site-header');
-    if (!header) return;
-    window.addEventListener('scroll', function () {
-        header.classList.toggle('scrolled', window.scrollY > 8);
-    }, { passive: true });
-}
-
-// Reveal animations on scroll
-function initRevealAnimations() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.querySelectorAll('.reveal').forEach(function (el) {
-            el.classList.add('in');
-        });
-        return;
-    }
-    const io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('in');
-                io.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(function (el) {
-        io.observe(el);
-        // Fallback: if already in view, add .in immediately
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-            el.classList.add('in');
-        }
-    });
-}
-
 function init() {
     updateBadge();
     renderCart();
@@ -658,8 +608,6 @@ function init() {
     initCategoryFilters();
     initAddToCart();
     initNavToggle();
-    initHeaderScroll();
-    initRevealAnimations();
 
     const finalizarForm = document.getElementById('finalizar-form');
     if (finalizarForm) {

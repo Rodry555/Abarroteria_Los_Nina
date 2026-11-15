@@ -13,10 +13,9 @@ require __DIR__ . '/partials/navbar.php';
 ?>
 
 <main>
-    <section class="section reveal">
+    <section class="section">
         <div class="container">
-            <div class="section-head">
-                <span class="eyebrow">Pedido</span>
+            <div class="page-header">
                 <h1>Tu carrito</h1>
                 <p>Revisa tus productos, aplica un cupón y confirma tu pedido.</p>
             </div>
@@ -26,42 +25,42 @@ require __DIR__ . '/partials/navbar.php';
                     <div id="cart-items" class="cart-items"></div>
 
                     <div id="cart-empty" class="empty-state" hidden>
-                        <div class="empty-state-icon" aria-hidden="true">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                        </div>
+                        <div class="empty-state-icon" aria-hidden="true">🛒</div>
                         <p>Tu carrito está vacío</p>
                         <a href="inventario.php" class="btn btn-primary">Ir a comprar</a>
                     </div>
                 </div>
 
-                <aside class="summary" aria-label="Resumen de compra">
+                <aside class="cart-summary" aria-label="Resumen de compra">
                     <h3>Resumen de compra</h3>
-                    <div class="summary-row">
+                    <div class="cart-summary-row">
                         <span>Subtotal</span>
                         <span id="subtotal"><?= e(formato_moneda(0)) ?></span>
                     </div>
-                    <div class="summary-row">
+                    <div class="cart-summary-row">
                         <span>Descuento</span>
                         <span id="descuento">-<?= e(formato_moneda(0)) ?></span>
                     </div>
-                    <div class="summary-row total">
+                    <div class="cart-summary-row total">
                         <span>Total final</span>
-                        <span id="total-final" class="price"><?= e(formato_moneda(0)) ?></span>
+                        <span id="total-final"><?= e(formato_moneda(0)) ?></span>
                     </div>
 
-                    <div class="coupon">
-                        <form id="coupon-form">
-                            <label for="coupon-input">Código de cupón</label>
-                            <div style="display: flex; gap: var(--s-2); width: 100%;">
-                                <input class="input" type="text" id="coupon-input" placeholder="BIENVENIDO10" autocomplete="off" style="flex: 1;">
-                                <button type="submit" id="coupon-btn" class="btn btn-secondary">Aplicar</button>
-                            </div>
-                            <p id="coupon-applied-info" class="text-muted" style="margin-top: var(--s-2); font-size: var(--fs-sm);"></p>
-                        </form>
-                    </div>
+                    <hr>
+
+                    <form id="coupon-form">
+                        <label for="coupon-input">Código de cupón</label>
+                        <div class="coupon-row">
+                            <input class="input" type="text" id="coupon-input" placeholder="BIENVENIDO10" autocomplete="off">
+                            <button type="submit" id="coupon-btn" class="btn btn-primary">Aplicar</button>
+                        </div>
+                        <p id="coupon-applied-info" class="text-muted" style="margin-top: 0.5rem; font-size: 0.9rem;"></p>
+                    </form>
+
+                    <hr>
 
                     <form id="finalizar-form">
-                        <button type="submit" id="finalizar-btn" class="btn btn-primary btn-lg btn-block">Finalizar compra</button>
+                        <button type="submit" id="finalizar-btn" class="btn btn-accent btn-lg btn-block">Finalizar compra</button>
                     </form>
                 </aside>
             </div>
@@ -89,7 +88,7 @@ require __DIR__ . '/partials/navbar.php';
             </div>
             <div class="purchase-detail">
                 <dt>Total</dt>
-                <dd id="purchase-total" class="price">—</dd>
+                <dd id="purchase-total">—</dd>
             </div>
         </dl>
 
@@ -97,7 +96,7 @@ require __DIR__ . '/partials/navbar.php';
 
         <div class="purchase-actions">
             <a href="inventario.php" class="btn btn-primary btn-lg">Seguir comprando</a>
-            <a href="index.php" class="btn btn-secondary btn-lg">Volver al inicio</a>
+            <a href="index.php" class="btn btn-outline btn-lg">Volver al inicio</a>
         </div>
     </div>
 </div>
