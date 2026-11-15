@@ -1,16 +1,36 @@
 <?php
 // Abarrotería Los Nina — Conexión PDO (formato moderno con DATABASE_URL)
 // En producción (Koyeb) las credenciales vienen de variables de entorno.
-// El fallback con valores vacíos es SOLO para no romper si alguien prueba local.
+// Fallback local: si no hay DATABASE_URL, usa valores por defecto para desarrollo local.
 
 $DATABASE_URL = getenv('DATABASE_URL') ?: '';
 $NVIDIA_API_KEY = getenv('NVIDIA_API_KEY') ?: '';
 
+// Configuración local por defecto (solo si no hay DATABASE_URL)
 if ($DATABASE_URL === '') {
-    // Sin DATABASE_URL no hay BD. En Koyeb esto significa: falta configurar la env var.
-    http_response_code(500);
-    die('Falta configurar la variable de entorno DATABASE_URL en el panel del servidor.');
-}
+    // Desarrollo local: usa SQLite en archivo local o MySQL local
+    // Descomenta la que uses:
+    
+    // Opción A: SQLite local (archivo local, sin servidor)
+    $pdo = new PDO('sqlite:' . __DIR__ . '/../data/local.db', null, null, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+    
+    // Opción B: MySQL/MariaDB local (descomenta y configura)
+    /*
+    $pdo = new PDO(
+        "mysql:host=127.0.0.1;port=3306;dbname=abarroteria;charset=utf8mb4",
+        'root',
+        '',
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ]
+    );
+    */
+} else {
 
 // parse_url extrae host, puerto, usuario, password y nombre de BD de la URL de TiDB
 $p = parse_url($DATABASE_URL);
@@ -39,6 +59,7 @@ try {
     http_response_code(500);
     die('No se pudo conectar a la base de datos. Revisa DATABASE_URL.');
 }
+} // cierre del else
 
 // Exponer la API key y la configuracion de la API de NVIDIA para el chatbot
 define('NVIDIA_API_KEY', $NVIDIA_API_KEY);
