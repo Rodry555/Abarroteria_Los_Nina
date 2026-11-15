@@ -19,15 +19,6 @@ try {
     $productosDestacados = [];
 }
 
-// Obtener categorías para la sección de categorías
-$categorias = [];
-try {
-    $stmt = $pdo->query('SELECT id, nombre FROM categorias ORDER BY id');
-    $categorias = $stmt->fetchAll();
-} catch (Exception $e) {
-    $categorias = [];
-}
-
 $titulo = 'Abarrotería Los Nina — Tu tienda de barrio de confianza';
 $descripcion = 'Abarrotes, lácteos, bebidas, limpieza y más con entrega en el barrio. Compra en línea y recibe asesoría por chat.';
 $preloadHero = true;
@@ -83,28 +74,6 @@ require __DIR__ . '/partials/navbar.php';
                     <a href="inventario.php" class="btn btn-primary btn-lg">Ver productos</a>
                     <a href="contacto.php" class="btn btn-light btn-lg">Contáctanos</a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categorías -->
-    <section class="section reveal">
-        <div class="container">
-            <div class="section-head">
-                <span class="eyebrow">Categorías</span>
-                <h2>Explora por departamento</h2>
-                <p>Encuentra lo que necesitas en un clic.</p>
-            </div>
-
-            <div class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--s-4);">
-                <?php foreach ($categorias as $c): ?>
-                    <a href="inventario.php?cat=<?= (int)$c['id'] ?>" class="product-card" style="flex-direction: row; align-items: center; padding: var(--s-4); gap: var(--s-3); text-decoration: none; color: inherit; min-height: auto;">
-                        <div style="width: 56px; height: 56px; border-radius: var(--r-md); background: var(--red-50); display: grid; place-items: center; flex-shrink: 0;">
-                            <?= product_icon_svg((int)$c['id']) ?>
-                        </div>
-                        <span style="font: 600 1rem var(--font-body); color: var(--ink); white-space: nowrap;"><?= htmlspecialchars($c['nombre']) ?></span>
-                    </a>
-                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -190,9 +159,9 @@ require __DIR__ . '/partials/navbar.php';
     <section class="section--alt reveal">
         <div class="container">
             <div class="cta-band">
-                <h2 style="margin-bottom: var(--s-3);">¿Listo para tu pedido?</h2>
-                <p style="max-width: 48ch; margin: 0 auto var(--s-6); opacity: .9;">Escríbenos por WhatsApp y te atendemos al instante.</p>
-                <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="btn" style="background: #fff; color: var(--red-700); font-weight: 700; border: none;">Pedidos por WhatsApp</a>
+                <h2>¿Listo para tu pedido?</h2>
+                <p>Escríbenos por WhatsApp y te atendemos al instante.</p>
+                <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener noreferrer" class="btn">Pedidos por WhatsApp</a>
             </div>
         </div>
     </section>

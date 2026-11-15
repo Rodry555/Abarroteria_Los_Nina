@@ -23,9 +23,9 @@
     --ink:     #1C1917;   /* texto principal y footer */
     --ink-2:   #57534E;   /* texto secundario */
     --ink-3:   #78716C;   /* metadatos (solo ≥ 14 px) */
-    --line:    #E7E1D8;   /* bordes */
-    --bg:      #FBF8F4;   /* fondo de página */
-    --bg-alt:  #F4EFE8;   /* secciones alternas / zona de imagen */
+    --line:    #D4D0C8;   /* bordes un poco más visibles */
+    --bg:      #F0EDE8;   /* fondo de página - más cálido y moderno */
+    --bg-alt:  #E8E4DD;   /* secciones alternas - contraste suave */
     --surface: #FFFFFF;   /* tarjetas */
 
     /* Estados */
@@ -98,7 +98,8 @@ body {
     line-height: 1.6;
     color: var(--ink);
     background:
-        radial-gradient(1100px 480px at 50% -140px, var(--red-50), transparent 70%),
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(214,40,40,0.08), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(245,179,1,0.06), transparent 50%),
         var(--bg);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -168,6 +169,20 @@ p { line-height: 1.7; }
 
 .section { padding-block: clamp(56px, 8vw, 96px); }
 .section--alt { background: var(--bg-alt); }
+
+/* CTA Band - banda de llamada a la acción */
+.cta-band {
+    background: linear-gradient(135deg, var(--red-600), var(--red-800));
+    color: #fff;
+    border-radius: var(--r-lg);
+    padding: clamp(32px, 6vw, 64px);
+    text-align: center;
+    box-shadow: var(--sh-3);
+}
+.cta-band h2 { margin-bottom: var(--s-3); font-size: clamp(1.5rem, 3vw, 2rem); }
+.cta-band p { max-width: 48ch; margin: 0 auto var(--s-6); opacity: .9; }
+.cta-band .btn { background: #fff; color: var(--red-700); font-weight: 700; border: none; }
+.cta-band .btn:hover { background: var(--red-50); transform: translateY(-2px); }
 
 .section-head { margin-bottom: var(--s-8); }
 
