@@ -643,6 +643,11 @@ function initRevealAnimations() {
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(function (el) {
         io.observe(el);
+        // Fallback: if already in view, add .in immediately
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add('in');
+        }
     });
 }
 
