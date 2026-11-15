@@ -450,6 +450,51 @@ textarea.input {
     box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.12);
 }
 
+/* Campo con botón para mostrar/ocultar contraseña */
+.password-field {
+    position: relative;
+}
+
+.password-field .input {
+    padding-right: 3rem;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.45rem;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: color var(--transition), background-color var(--transition);
+}
+
+.password-toggle:hover {
+    color: var(--color-text-main);
+    background-color: var(--color-surface-alt);
+}
+
+.password-toggle .eye-off {
+    display: none;
+}
+
+.password-toggle[aria-pressed="true"] .eye-open {
+    display: none;
+}
+
+.password-toggle[aria-pressed="true"] .eye-off {
+    display: block;
+}
+
 label {
     display: block;
     font-weight: 700;

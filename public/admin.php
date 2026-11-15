@@ -290,51 +290,65 @@ function claves_configuracion(): array
 // ------------------------------------------------------------
 // Datos para la vista
 // ------------------------------------------------------------
-$categorias = $pdo->query('SELECT id, nombre FROM categorias ORDER BY nombre')->fetchAll();
-$productos = $pdo->query(
-    'SELECT p.*, c.nombre AS categoria_nombre
-     FROM productos p
-     INNER JOIN categorias c ON p.categoria_id = c.id
-     ORDER BY p.nombre'
-)->fetchAll();
-$cupones = $pdo->query('SELECT * FROM cupones ORDER BY codigo')->fetchAll();
-
+$datosError = '';
+$categorias = [];
+$productos = [];
+$cupones = [];
 $configuracion = [];
-try {
-    foreach ($pdo->query('SELECT clave, valor FROM configuracion') as $fila) {
-        $configuracion[$fila['clave']] = $fila['valor'];
-    }
-} catch (Throwable $e) {
-    $configuracion = [];
-}
-
-$compras = $pdo->query('SELECT * FROM compras ORDER BY fecha DESC LIMIT 50')->fetchAll();
+$compras = [];
 $comprasDetalle = [];
-if (!empty($compras)) {
-    $ids = array_map('intval', array_column($compras, 'id'));
-    $marcadores = implode(',', array_fill(0, count($ids), '?'));
-    $stmt = $pdo->prepare(
-        "SELECT d.compra_id, d.cantidad, d.subtotal, p.nombre
-         FROM compra_detalle d
-         INNER JOIN productos p ON p.id = d.producto_id
-         WHERE d.compra_id IN ({$marcadores})
-         ORDER BY d.id"
-    );
-    $stmt->execute($ids);
-    foreach ($stmt->fetchAll() as $fila) {
-        $comprasDetalle[(int) $fila['compra_id']][] = $fila;
+$reservas = [];
+$mensajes = [];
+
+try {
+    $categorias = $pdo->query('SELECT id, nombre FROM categorias ORDER BY nombre')->fetchAll();
+    $productos = $pdo->query(
+        'SELECT p.*, c.nombre AS categoria_nombre
+         FROM productos p
+         INNER JOIN categorias c ON p.categoria_id = c.id
+         ORDER BY p.nombre'
+    )->fetchAll();
+    $cupones = $pdo->query('SELECT * FROM cupones ORDER BY codigo')->fetchAll();
+
+    try {
+        foreach ($pdo->query('SELECT clave, valor FROM configuracion') as $fila) {
+            $configuracion[$fila['clave']] = $fila['valor'];
+        }
+    } catch (Throwable $e) {
+        $configuracion = [];
     }
+
+    $compras = $pdo->query('SELECT * FROM compras ORDER BY fecha DESC LIMIT 50')->fetchAll();
+    if (!empty($compras)) {
+        $ids = array_map('intval', array_column($compras, 'id'));
+        $marcadores = implode(',', array_fill(0, count($ids), '?'));
+        $stmt = $pdo->prepare(
+            "SELECT d.compra_id, d.cantidad, d.subtotal, p.nombre
+             FROM compra_detalle d
+             INNER JOIN productos p ON p.id = d.producto_id
+             WHERE d.compra_id IN ({$marcadores})
+             ORDER BY d.id"
+        );
+        $stmt->execute($ids);
+        foreach ($stmt->fetchAll() as $fila) {
+            $comprasDetalle[(int) $fila['compra_id']][] = $fila;
+        }
+    }
+
+    $reservas = $pdo->query(
+        'SELECT r.*, p.nombre AS producto_nombre
+         FROM reservas r
+         INNER JOIN productos p ON p.id = r.producto_id
+         ORDER BY r.fecha_reserva DESC
+         LIMIT 50'
+    )->fetchAll();
+
+    $mensajes = $pdo->query('SELECT * FROM mensajes_contacto ORDER BY fecha DESC LIMIT 50')->fetchAll();
+} catch (Throwable $e) {
+    // Si la base falla, mostramos un aviso legible en lugar de una página en blanco.
+    error_log('[admin] Error al cargar datos del panel: ' . $e->getMessage());
+    $datosError = 'No se pudieron cargar los datos del panel. Revisa la conexión con la base de datos e intenta de nuevo.';
 }
-
-$reservas = $pdo->query(
-    'SELECT r.*, p.nombre AS producto_nombre
-     FROM reservas r
-     INNER JOIN productos p ON p.id = r.producto_id
-     ORDER BY r.fecha_reserva DESC
-     LIMIT 50'
-)->fetchAll();
-
-$mensajes = $pdo->query('SELECT * FROM mensajes_contacto ORDER BY fecha DESC LIMIT 50')->fetchAll();
 
 $flashMensajes = flash_obtener();
 
@@ -366,6 +380,10 @@ require __DIR__ . '/partials/navbar.php';
                     <?= e($mensaje['mensaje']) ?>
                 </div>
             <?php endforeach; ?>
+
+            <?php if ($datosError !== ''): ?>
+                <div class="toast error show toast-inline" role="alert"><?= e($datosError) ?></div>
+            <?php endif; ?>
 
             <nav class="admin-tabs" aria-label="Secciones del panel">
                 <?php

@@ -26,3 +26,7 @@ recursos/
 
 # Scripts temporales de corrección
 fix_*.ps1
+
+# Base de datos local (SQLite)
+data/*.db
+data/*.db-journal

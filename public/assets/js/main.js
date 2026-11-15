@@ -601,6 +601,28 @@ function initNavToggle() {
     });
 }
 
+function initPasswordToggles() {
+    const toggles = document.querySelectorAll('[data-toggle-password]');
+    if (!toggles.length) {
+        return;
+    }
+
+    toggles.forEach(function (toggle) {
+        const input = document.getElementById(toggle.getAttribute('data-toggle-password'));
+        if (!input) {
+            return;
+        }
+
+        toggle.addEventListener('click', function () {
+            const visible = input.type === 'text';
+            input.type = visible ? 'password' : 'text';
+            toggle.setAttribute('aria-pressed', visible ? 'false' : 'true');
+            toggle.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
+            input.focus();
+        });
+    });
+}
+
 function init() {
     updateBadge();
     renderCart();
@@ -608,6 +630,7 @@ function init() {
     initCategoryFilters();
     initAddToCart();
     initNavToggle();
+    initPasswordToggles();
 
     const finalizarForm = document.getElementById('finalizar-form');
     if (finalizarForm) {
