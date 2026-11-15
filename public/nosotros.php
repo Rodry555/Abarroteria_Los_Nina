@@ -65,6 +65,19 @@ require __DIR__ . '/partials/navbar.php';
                     </ul>
                 </div>
             <?php endif; ?>
+
+            <!-- Mapa de ubicación -->
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">📍 Nuestra ubicación</h3>
+                <div class="map-embed">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.4110934541004!2d-68.2068755!3d-16.505330999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915ede4423daa549%3A0xffb92bd85c6d5602!2sBartolome%20Andrade%2C%20El%20Alto!5e0!3m2!1ses-419!2sbo!4v1794693516161!5m2!1ses-419!2sbo"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            title="Ubicación de Abarrotería Los Nina"></iframe>
+                </div>
+            </div>
+
         </div>
     </section>
 </main>

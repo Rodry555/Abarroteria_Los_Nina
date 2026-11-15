@@ -15,11 +15,11 @@
     --color-accent-hover: #F57C00;
     --color-accent-soft: #2B1D08;
 
-    /* Superficies y texto - Tema oscuro */
-    --color-bg: #0D0D0D;
-    --color-surface: #1A1A1A;
-    --color-surface-alt: #232323;
-    --color-border: #2E2E2E;
+    /* Superficies y texto - Tema oscuro elegante (carbón, no negro puro) */
+    --color-bg: #0E0E10;
+    --color-surface: #17171A;
+    --color-surface-alt: #1F1F23;
+    --color-border: #2C2C31;
     --color-text-main: #F5F5F5;
     --color-text-muted: #A3A3A3;
     --color-text-inverse: #FFFFFF;
@@ -76,6 +76,10 @@ html {
 body {
     font-family: var(--font-sans);
     background-color: var(--color-bg);
+    background-image:
+        radial-gradient(1000px 520px at 50% -10%, rgba(198, 40, 40, 0.10), transparent 65%),
+        linear-gradient(180deg, #131316 0%, #0E0E10 45%, #0A0A0C 100%);
+    background-repeat: no-repeat;
     color: var(--color-text-main);
     line-height: 1.6;
     min-height: 100vh;
@@ -203,7 +207,7 @@ h1, h2, h3, h4 {
 
 @supports ((backdrop-filter: blur(6px)) or (-webkit-backdrop-filter: blur(6px))) {
     .navbar {
-        background-color: rgba(13, 13, 13, 0.9);
+        background-color: rgba(23, 23, 26, 0.9);
         -webkit-backdrop-filter: saturate(180%) blur(10px);
         backdrop-filter: saturate(180%) blur(10px);
     }
@@ -459,8 +463,8 @@ label {
 
 /* 4.3 Hero --------------------------------------------------- */
 .hero {
-    /* Negro cálido para el hero - combina con el tema oscuro */
-    --hero-ink: #0A0A0A;
+    /* Carbón para el hero - combina con el tema oscuro elegante */
+    --hero-ink: #0E0E10;
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -497,10 +501,10 @@ label {
     z-index: -1;
     background: linear-gradient(
         90deg,
-        rgba(10, 10, 10, 0.92) 0%,
-        rgba(10, 10, 10, 0.75) 38%,
-        rgba(10, 10, 10, 0.25) 70%,
-        rgba(10, 10, 10, 0.1) 100%
+        rgba(14, 14, 16, 0.92) 0%,
+        rgba(14, 14, 16, 0.75) 38%,
+        rgba(14, 14, 16, 0.25) 70%,
+        rgba(14, 14, 16, 0.1) 100%
     );
 }
 
@@ -606,9 +610,9 @@ label {
     .hero::before {
         background: linear-gradient(
             0deg,
-            rgba(10, 10, 10, 0.95) 0%,
-            rgba(10, 10, 10, 0.8) 45%,
-            rgba(10, 10, 10, 0.1) 100%
+            rgba(14, 14, 16, 0.95) 0%,
+            rgba(14, 14, 16, 0.8) 45%,
+            rgba(14, 14, 16, 0.1) 100%
         );
     }
 
@@ -1591,10 +1595,30 @@ body.has-modal {
     }
 }
 
+/* 4.12 Mapa de ubicación ------------------------------------ */
+.map-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 300px;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface-alt);
+}
+
+.map-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
 /* 4.11 Footer ----------------------------------------------- */
 .site-footer {
     margin-top: auto;
-    background-color: #0A0A0A;
+    background-color: #0A0A0C;
     color: rgba(255, 255, 255, 0.82);
     padding-block: clamp(2rem, 4vw, 3rem);
     border-top: 4px solid var(--color-accent);
