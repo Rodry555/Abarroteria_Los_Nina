@@ -1764,6 +1764,11 @@ body.has-modal {
         border: none;
     }
 
+    .btn-whatsapp {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
     @keyframes nav-in {
         from { opacity: 0; transform: translateY(-6px); }
         to { opacity: 1; transform: none; }
