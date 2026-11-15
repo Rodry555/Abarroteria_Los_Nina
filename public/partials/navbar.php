@@ -11,7 +11,6 @@ $enlaces = [
     'inicio'     => ['href' => 'index.php', 'texto' => 'Inicio'],
     'inventario' => ['href' => 'inventario.php', 'texto' => 'Inventario'],
     'nosotros'   => ['href' => 'nosotros.php', 'texto' => 'Nosotros'],
-    'contacto'   => ['href' => 'contacto.php', 'texto' => 'Contacto'],
 ];
 ?>
 <nav class="navbar" aria-label="Navegación principal">
@@ -43,6 +42,12 @@ $enlaces = [
                     <?= htmlspecialchars($enlace['texto']) ?>
                 </a>
             <?php endforeach; ?>
+
+            <a href="<?= e(whatsapp_enlace()) ?>" target="_blank" rel="noopener"
+               class="btn btn-whatsapp" aria-label="Contactar por WhatsApp">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M15 11h.01"/><path d="M15 16h.01"/></svg>
+                WhatsApp
+            </a>
 
             <a href="carrito.php" class="cart-link<?= $paginaActiva === 'carrito' ? ' is-active' : '' ?>"
                aria-label="Ver carrito"
